@@ -1,2 +1,2 @@
 <?php
-echo date('c');
+require_once('common.php');
