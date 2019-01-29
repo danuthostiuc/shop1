@@ -6,7 +6,6 @@ if(!isset($link_address1)) {
     $link_address1 = 'cart.php';
 }
 
-
 $sql = "SELECT id, title, description, price FROM products";
 $result = $conn->query($sql);
 
@@ -29,13 +28,15 @@ $result = $conn->query($sql);
                                 <td class="cp_img">
                                     <img src="img/<?=$row["id"]?>.jpg"/>
                                 </td>
-                                <td>
+                                <td class="cp_img">
                                     <ul>
                                         <li><?=$row["title"]?></li>
                                         <li><?=$row["description"]?></li>
-                                        <li><?=$row["price"]?></li></ul></td>
-                                <td>
-                                    <?php echo translate("Add") ?>
+                                        <li><?=$row["price"]?></li>
+                                    </ul>
+                                </td>
+                                <td class="cp_img">
+                                    <a href="" class=""><?php echo translate("Add")?></a>
                                 </td>
                             </tr>
                         <?php else: ?>
@@ -45,5 +46,7 @@ $result = $conn->query($sql);
             <?php $conn->close(); ?>
                 </table>
         <a href=<?=$link_address1?>> <?php echo translate("Go to cart") ?></a>
+        <?php
+        ?>
     </body>
 </html>
