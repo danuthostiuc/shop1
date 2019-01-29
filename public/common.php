@@ -17,7 +17,6 @@ if(!isset($link_address1)) {
 }
 
 $conn = new mysqli(DBHOST, DBUSER, DBPWD, DBNAME);
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
@@ -31,7 +30,7 @@ if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
         if(!array_search($row["id"], $_SESSION['cart'])) {
-            echo "<tr><td><img src=\"\"/></td><td><ul><li>" . $row["title"] . "</li><li>" . $row["description"] . "</li><li>" . $row["price"] . "</li></ul></td><td>Add</td></tr>";
+            echo "<tr><td><img src='img/".$row["id"].".jpg'/></td><td><ul><li>" . $row["title"] . "</li><li>" . $row["description"] . "</li><li>" . $row["price"] . "</li></ul></td><td>Add</td></tr>";
         }
     }
     echo "</table>";
