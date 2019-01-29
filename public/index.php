@@ -4,25 +4,28 @@ require_once('common.php');
 if(!isset($link_address1)) {
     $link_address1 = 'cart.php';
 }
-//var_dump($_SESSION["cart"]);
+
 $params = $_SESSION["cart"];
-var_dump($params);
 
 if(count($params) > 0){
     $place_holders = implode(',', array_fill(0, count($params), '?'));
+    try {
+        $stmt = $conn->prepare("SELECT * FROM products WHERE id NOT IN ($place_holders)");
+        $stmt->execute($params);
+        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    }
+    catch(PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
 }else{
-    $place_holders = implode(',', array_fill(0, 1, '?'));
-}
-
-//var_dump($place_holders);
-try {
-    $stmt = $conn->prepare("SELECT * FROM products WHERE id NOT IN ($place_holders)");
-    $stmt->execute($params);
-    $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    //var_dump($result);
-}
-catch(PDOException $e) {
-    echo "Error: " . $e->getMessage();
+    try {
+        $stmt = $conn->prepare("SELECT * FROM products");
+        $stmt->execute($params);
+        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    }
+    catch(PDOException $e) {
+        echo "Error: " . $e->getMessage();
+    }
 }
 ?>
 
@@ -56,7 +59,6 @@ catch(PDOException $e) {
         <a href=<?=$link_address1?>> <?php echo translate("Go to cart") ?></a>
         <?php
         $conn = null;
-        var_dump($_SESSION["cart"]);
         ?>
     </body>
 </html>
