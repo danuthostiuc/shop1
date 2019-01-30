@@ -1,21 +1,33 @@
 <?php
-require_once('common.php');
+require_once( 'common.php' );
 
-if(count($_SESSION["cart"]) > 0){
-    $place_holders = implode(',', array_fill(0, count($_SESSION["cart"]), '?'));
+function addToCart() {
+    if (isset($_GET['id']) & !empty($_GET['id'])) {
+        $items = $_GET['id'];
+        array_push($_SESSION['cart'], $items);
+    }
+}
+
+if (isset($_GET['add'])) {
+    addToCart();
+}
+
+if( count( $_SESSION["cart"] ) > 0 ) {
+    $place_holders = implode( ',', array_fill( 0, count($_SESSION["cart"] ), '?') );
+    echo $place_holders;
     try {
-        $stmt = $conn->prepare("SELECT * FROM products WHERE id NOT IN ($place_holders)");
+        $stmt = $conn->prepare( "SELECT * FROM products WHERE id NOT IN ( $place_holders )" );
         $stmt->execute($_SESSION["cart"]);
-        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->setFetchMode( PDO::FETCH_ASSOC );
     }
     catch(PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
-}else{
+}else {
     try {
-        $stmt = $conn->prepare("SELECT * FROM products");
-        $stmt->execute($_SESSION["cart"]);
-        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt = $conn->prepare( "SELECT * FROM products" );
+        $stmt->execute();
+        $stmt->setFetchMode( PDO::FETCH_ASSOC );
     }
     catch(PDOException $e) {
         echo "Error: " . $e->getMessage();
@@ -29,28 +41,28 @@ if(count($_SESSION["cart"]) > 0){
     </head>
     <body>
         <h1>
-            <?= translate("Products") ?>
+            <?= translate( "Products" ) ?>
         </h1>
         <table>
-            <?php foreach ($stmt->fetchAll() as $row): ?>
+            <?php foreach ( $stmt->fetchAll() as $row ): ?>
                 <tr>
                     <td class="cp_img">
-                        <img src="img/<?=$row["id"]?>.jpg"/>
+                        <img src="img/<?= $row["id"] ?>.jpg"/>
                     </td>
                     <td class="cp_img">
                         <ul>
-                            <li><?= translate($row["title"]) ?></li>
-                            <li><?= translate($row["description"]) ?></li>
-                            <li><?= translate($row["price"]) ?></li>
+                            <li><?= translate( $row["title"] ) ?></li>
+                            <li><?= translate( $row["description"] ) ?></li>
+                            <li><?= translate( $row["price"] ) ?></li>
                         </ul>
                     </td>
                     <td class="cp_img">
-                        <a href="" class=""><?= translate("Add")?></a>
+                        <a href="index.php?add&id=<?= $row["id"] ?>" class=""><?= translate( "Add" ) ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
         </table>
-        <a href="cart.php"> <?= translate("Go to cart") ?></a>
-        <?php $conn = null; ?>
+        <a href="cart.php"> <?= translate( "Go to cart" ) ?></a>
+        <?php var_dump( $_SESSION["cart"] ); ?>
     </body>
 </html>
