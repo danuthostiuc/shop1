@@ -9,13 +9,13 @@
  */
 
 
-define( 'DBUSER', 'username_here' );
+define( 'DB_USER', 'username_here' );
 
-define( 'DBPWD', 'password_here' );
+define( 'DB_PWD', 'password_here' );
 
-define( 'DBHOST', 'localhost' );
+define( 'DB_HOST', 'localhost' );
 
-define( 'DBNAME', 'database_name_here' );
+define( 'DB_NAME', 'database_name_here' );
 
 define( 'ADMIN_NAME', 'admin_name_here' );
 

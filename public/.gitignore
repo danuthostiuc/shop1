@@ -1,2 +1,4 @@
 config.php
 ../.idea
+../composer.phar
+test.php

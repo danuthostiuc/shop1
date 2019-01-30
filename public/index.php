@@ -14,7 +14,6 @@ if (isset($_GET['add'])) {
 
 if( count( $_SESSION["cart"] ) > 0 ) {
     $place_holders = implode( ',', array_fill( 0, count($_SESSION["cart"] ), '?') );
-    echo $place_holders;
     try {
         $stmt = $conn->prepare( "SELECT * FROM products WHERE id NOT IN ( $place_holders )" );
         $stmt->execute($_SESSION["cart"]);
@@ -63,6 +62,5 @@ if( count( $_SESSION["cart"] ) > 0 ) {
             <?php endforeach; ?>
         </table>
         <a href="cart.php"> <?= translate( "Go to cart" ) ?></a>
-        <?php var_dump( $_SESSION["cart"] ); ?>
     </body>
 </html>
