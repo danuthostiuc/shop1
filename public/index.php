@@ -1,17 +1,11 @@
 <?php
 require_once('common.php');
 
-if(!isset($link_address1)) {
-    $link_address1 = 'cart.php';
-}
-
-$params = $_SESSION["cart"];
-
-if(count($params) > 0){
-    $place_holders = implode(',', array_fill(0, count($params), '?'));
+if(count($_SESSION["cart"]) > 0){
+    $place_holders = implode(',', array_fill(0, count($_SESSION["cart"]), '?'));
     try {
         $stmt = $conn->prepare("SELECT * FROM products WHERE id NOT IN ($place_holders)");
-        $stmt->execute($params);
+        $stmt->execute($_SESSION["cart"]);
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
     }
     catch(PDOException $e) {
@@ -20,7 +14,7 @@ if(count($params) > 0){
 }else{
     try {
         $stmt = $conn->prepare("SELECT * FROM products");
-        $stmt->execute($params);
+        $stmt->execute($_SESSION["cart"]);
         $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
     }
     catch(PDOException $e) {
@@ -35,30 +29,28 @@ if(count($params) > 0){
     </head>
     <body>
         <h1>
-            <?php echo translate("Products") ?>
+            <?= translate("Products") ?>
         </h1>
         <table>
-            <?php foreach ($stmt->fetchAll() as $row) { ?>
+            <?php foreach ($stmt->fetchAll() as $row): ?>
                 <tr>
                     <td class="cp_img">
                         <img src="img/<?=$row["id"]?>.jpg"/>
                     </td>
                     <td class="cp_img">
                         <ul>
-                            <li><?=$row["title"]?></li>
-                            <li><?=$row["description"]?></li>
-                            <li><?=$row["price"]?></li>
+                            <li><?= translate($row["title"]) ?></li>
+                            <li><?= translate($row["description"]) ?></li>
+                            <li><?= translate($row["price"]) ?></li>
                         </ul>
                     </td>
                     <td class="cp_img">
-                        <a href="" class=""><?php echo translate("Add")?></a>
+                        <a href="" class=""><?= translate("Add")?></a>
                     </td>
                 </tr>
-            <?php } ?>
+            <?php endforeach; ?>
         </table>
-        <a href=<?=$link_address1?>> <?php echo translate("Go to cart") ?></a>
-        <?php
-        $conn = null;
-        ?>
+        <a href="cart.php"> <?= translate("Go to cart") ?></a>
+        <?php $conn = null; ?>
     </body>
 </html>
