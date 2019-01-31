@@ -51,10 +51,20 @@ function displayCartProducts ( $conn ) {
 
 $stmt = displayCartProducts( $conn );
 
-function sendEmail() {
+function sendEmail( $stmt ) {
     $to = SHOP_EMAIL;
     $subject = "Test";
-    $message = file_get_contents('cart.php');
+    //$message = file_get_contents('cart.php');
+    $message1 = '<html><head><link rel="stylesheet" type="text/css" href=""></head><body>';
+    $message1 .= '<h1>' . translate( "Cart" ) . '</h1>';
+    $message2 = '<table rules="all" style="border-color: #666;" cellpadding="10">';
+    foreach ( $stmt->fetchAll() as $row ):
+        $message2 .= '<tr><td class=""><img src="img/"' . $row["id"] . '".jpg"/></td>';
+        $message2 .= '<td class=""><ul><li>' . translate( $row["title"] ) . '</li><li>' . translate( $row["description"] ) . '</li><li>' . translate( $row["price"] ) . '</li></ul></td>';
+        $message2 .= '<td class=""><a href="cart.php?remove&id=' . $row["id"] . 'class="">' . translate( "Remove" ) . '</a></td></tr>';
+    endforeach;
+    $message3 = '</table></body></html>';
+    $message = $message1 . $message2 . $message3;
     $headers = "MIME-Version: 1.0" . "\r\n";
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
     $headers .= 'From: <webmaster@example.com>' . "\r\n";
@@ -63,7 +73,7 @@ function sendEmail() {
 }
 
 if ( isset( $_GET["checkout"] ) ) {
-    sendEmail();
+    sendEmail ( $stmt );
 }
 
 ?>
