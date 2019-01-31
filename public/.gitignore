@@ -3,6 +3,3 @@ config.php
 ../composer.phar
 test.php
 
-product.php
-
-products.php

@@ -12,26 +12,37 @@ if (isset($_GET['add'])) {
     addToCart();
 }
 
-if( count( $_SESSION["cart"] ) > 0 ) {
-    $place_holders = implode( ',', array_fill( 0, count($_SESSION["cart"] ), '?') );
-    try {
-        $stmt = $conn->prepare( "SELECT * FROM products WHERE id NOT IN ( $place_holders )" );
-        $stmt->execute($_SESSION["cart"]);
-        $stmt->setFetchMode( PDO::FETCH_ASSOC );
-    }
-    catch(PDOException $e) {
-        echo "Error: " . $e->getMessage();
-    }
-}else {
-    try {
-        $stmt = $conn->prepare( "SELECT * FROM products" );
-        $stmt->execute();
-        $stmt->setFetchMode( PDO::FETCH_ASSOC );
-    }
-    catch( PDOException $e ) {
-        echo "Error: " . $e->getMessage();
+function displayProducts ( $conn ) {
+    if( count( $_SESSION["cart"] ) > 0 ) {
+        $place_holders = implode( ',', array_fill( 0, count($_SESSION["cart"] ), '?') );
+        try {
+            $stmt = $conn->prepare( "SELECT * FROM products WHERE id NOT IN ( $place_holders )" );
+            $stmt->execute($_SESSION["cart"]);
+            $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        }
+        catch(PDOException $e) {
+            echo "Error: " . $e->getMessage();
+        }
+        finally {
+            return $stmt;
+        }
+    }else {
+        try {
+            $stmt = $conn->prepare( "SELECT * FROM products" );
+            $stmt->execute();
+            $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        }
+        catch( PDOException $e ) {
+            echo "Error: " . $e->getMessage();
+        }
+        finally {
+            return $stmt;
+        }
     }
 }
+
+$stmt = displayProducts ( $conn );
+
 ?>
 
 <html>

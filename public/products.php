@@ -31,19 +31,38 @@ if ( isset( $_GET["edit"] ) ) {
     die;
 }
 
+function deleteProduct ( $conn ) {
+    try {
+        $stmt = $conn->prepare( "DELETE FROM products WHERE id=?" );
+        $stmt->bindValue( 1, $_GET["id"], PDO::PARAM_INT );
+        $stmt->execute();
+    }
+    catch ( PDOException $e ) {
+        echo translate ( "Error: " ) . $e->getMessage();
+    }
+}
+
 if ( isset( $_GET["delete"] ) ) {
+    deleteProduct ( $conn );
     header( "Location: products.php" );
     die;
 }
 
-try {
-    $stmt = $conn->prepare( "SELECT * FROM products" );
-    $stmt->execute();
-    $stmt->setFetchMode( PDO::FETCH_ASSOC );
+function displayAllProducts ( $conn ) {
+    try {
+        $stmt = $conn->prepare( "SELECT * FROM products" );
+        $stmt->execute();
+        $stmt->setFetchMode( PDO::FETCH_ASSOC );
+    }
+    catch( PDOException $e ) {
+        echo translate ( "Error: " ) . $e->getMessage();
+    }
+    finally {
+        return $stmt;
+    }
 }
-catch( PDOException $e ) {
-    echo "Error: " . $e->getMessage();
-}
+
+$stmt = displayAllProducts( $conn );
 
 ?>
 

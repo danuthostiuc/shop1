@@ -21,17 +21,24 @@ if ( isset( $_GET["remove"] ) ) {
     removeFromCart();
 }
 
-$items = $_SESSION["cart"];
-$place_holders = implode( ',', array_fill(0, count($items), '?' ) );
+function displayCartProducts ( $conn ) {
+    $items = $_SESSION["cart"];
+    $place_holders = implode( ',', array_fill(0, count($items), '?' ) );
 
-try {
-    $stmt = $conn->prepare( "SELECT * FROM products WHERE id IN ( $place_holders )" );
-    $stmt->execute( $items );
-    $stmt->setFetchMode( PDO::FETCH_ASSOC );
+    try {
+        $stmt = $conn->prepare( "SELECT * FROM products WHERE id IN ( $place_holders )" );
+        $stmt->execute( $items );
+        $stmt->setFetchMode( PDO::FETCH_ASSOC );
+    }
+    catch ( PDOException $e ) {
+        echo "Error: " . $e->getMessage();
+    }
+    finally {
+        return $stmt;
+    }
 }
-catch( PDOException $e ) {
-    echo "Error: " . $e->getMessage();
-}
+
+$stmt = displayCartProducts( $conn );
 
 function sendEmail() {
     $to = SHOP_EMAIL;
