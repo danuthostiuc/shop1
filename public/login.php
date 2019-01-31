@@ -25,11 +25,11 @@ function validation () {
             die;
         }
         else {
-            echo "Wrong username or password";
+            echo translate (" Wrong username or password" );
         }
     }
     else {
-        echo "Empty field";
+        echo translate ( "Empty field" );
     }
 }
 
@@ -47,12 +47,12 @@ if ( isset ( $_POST["Submit"] ) ) {
         <h1>
             <?= translate ( "Log In" ) ?>
         </h1>
-        <form method="post" action="<?= htmlspecialchars( $_SERVER["PHP_SELF"] ) ?>">
-            <input type="text" name="username" placeholder= <?= translate ( "Username" ) ?> >
+        <form method="post" action=" <?= htmlspecialchars ( $_SERVER["PHP_SELF"] ) ?> ">
+            <input type="text" name="username" placeholder="<?= translate ( "Username" ) ?>">
             <br>
-            <input type="password" name="password" placeholder= <?= translate ( "Password" ) ?> >
+            <input type="password" name="password" placeholder="<?= translate ( "Password" ) ?>">
             <br>
-            <input type="submit" name="Submit" value= <?= translate ( "Login" ) ?> >
+            <input type="submit" name="Submit" value="<?= translate ( "Login" ) ?>">
         </form>
     </body>
 </html>

@@ -28,7 +28,7 @@ if( count( $_SESSION["cart"] ) > 0 ) {
         $stmt->execute();
         $stmt->setFetchMode( PDO::FETCH_ASSOC );
     }
-    catch(PDOException $e) {
+    catch( PDOException $e ) {
         echo "Error: " . $e->getMessage();
     }
 }
