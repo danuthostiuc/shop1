@@ -2,3 +2,7 @@ config.php
 ../.idea
 ../composer.phar
 test.php
+
+product.php
+
+products.php

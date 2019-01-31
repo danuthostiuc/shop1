@@ -8,7 +8,11 @@
 session_start();
 require_once( 'config.php' );
 
-if( !isset( $_SESSION["cart"] ) ) {
+if ( !isset( $_SESSION[ADMIN_NAME] ) ) {
+    $_SESSION[ADMIN_NAME] = 0;
+}
+
+if ( !isset( $_SESSION["cart"] ) ) {
     $_SESSION["cart"] = array();
 }
 
