@@ -54,7 +54,6 @@ $stmt = displayCartProducts( $conn );
 function sendEmail( $stmt ) {
     $to = SHOP_EMAIL;
     $subject = "Test";
-    //$message = file_get_contents('cart.php');
     $message1 = '<html><head><link rel="stylesheet" type="text/css" href=""></head><body>';
     $message1 .= '<h1>' . translate( "Cart" ) . '</h1>';
     $message2 = '<table rules="all" style="border-color: #666;" cellpadding="10">';
