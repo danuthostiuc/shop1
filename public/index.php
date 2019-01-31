@@ -73,5 +73,6 @@ $stmt = displayProducts ( $conn );
             <?php endforeach; ?>
         </table>
         <a href="cart.php"> <?= translate( "Go to cart" ) ?></a>
+        <a href="login.php"> <?= translate( "Log In" ) ?></a>
     </body>
 </html>

@@ -25,16 +25,27 @@ function displayCartProducts ( $conn ) {
     $items = $_SESSION["cart"];
     $place_holders = implode( ',', array_fill(0, count($items), '?' ) );
 
-    try {
-        $stmt = $conn->prepare( "SELECT * FROM products WHERE id IN ( $place_holders )" );
-        $stmt->execute( $items );
-        $stmt->setFetchMode( PDO::FETCH_ASSOC );
+    if( !empty ( $place_holders ) ) {
+        try {
+            $stmt = $conn->prepare( "SELECT * FROM products WHERE id IN ( $place_holders )" );
+            $stmt->execute( $items );
+            $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        } catch ( PDOException $e ) {
+            echo translate( "Error: " ) . $e->getMessage();
+        } finally {
+            return $stmt;
+        }
     }
-    catch ( PDOException $e ) {
-        echo translate ( "Error: " ) . $e->getMessage();
-    }
-    finally {
-        return $stmt;
+    else {
+        try {
+            $stmt = $conn->prepare( "SELECT * FROM products WHERE id IN ( 0 )" );
+            $stmt->execute();
+            $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        } catch ( PDOException $e ) {
+            echo translate( "Error: " ) . $e->getMessage();
+        } finally {
+            return $stmt;
+        }
     }
 }
 
@@ -84,7 +95,8 @@ if ( isset( $_GET["checkout"] ) ) {
             </tr>
             <?php endforeach; ?>
             </table>
-            <a href="index.php"> <?= translate( "Go to index" ) ?></a>
+            <a href="index.php"> <?= translate( "Go to index" ) ?> </a>
             <a href="cart.php?checkout"> <?= translate( "Checkout" ) ?> </a>
+            <a href="login.php"> <?= translate( "Log In" ) ?></a>
         </body>
 </html>
