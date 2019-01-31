@@ -20,6 +20,14 @@ function translate( $text ) {
     return $text;
 }
 
+function testInput ( $data ) {
+    $data = trim ( $data );
+    $data = stripslashes ( $data );
+    $data = htmlspecialchars ( $data );
+    $data = strip_tags ( $data );
+    return $data;
+}
+
 try {
     $conn = new PDO( "mysql:host=" . DB_HOST . ";dbname=" . DB_NAME, DB_USER, DB_PWD );
     $conn->setAttribute( PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION );

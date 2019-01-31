@@ -21,7 +21,7 @@ function displayProducts ( $conn ) {
             $stmt->setFetchMode( PDO::FETCH_ASSOC );
         }
         catch(PDOException $e) {
-            echo "Error: " . $e->getMessage();
+            echo translate ( "Error: " ) . $e->getMessage();
         }
         finally {
             return $stmt;
@@ -33,7 +33,7 @@ function displayProducts ( $conn ) {
             $stmt->setFetchMode( PDO::FETCH_ASSOC );
         }
         catch( PDOException $e ) {
-            echo "Error: " . $e->getMessage();
+            echo translate ( "Error: " ) . $e->getMessage();
         }
         finally {
             return $stmt;

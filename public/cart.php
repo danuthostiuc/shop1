@@ -12,7 +12,7 @@ function removeFromCart() {
         if ( ($key = array_search( $_GET["id"], $_SESSION["cart"] ) ) !== false ) {
             array_splice( $_SESSION["cart"], $key, 1 );
         } else {
-            echo "Failed to delete element";
+            echo translate ( "Failed to delete element" );
         }
     }
 }
@@ -31,7 +31,7 @@ function displayCartProducts ( $conn ) {
         $stmt->setFetchMode( PDO::FETCH_ASSOC );
     }
     catch ( PDOException $e ) {
-        echo "Error: " . $e->getMessage();
+        echo translate ( "Error: " ) . $e->getMessage();
     }
     finally {
         return $stmt;

@@ -7,14 +7,6 @@
  */
 require_once ("common.php");
 
-function testInput ( $data ) {
-    $data = trim ( $data );
-    $data = stripslashes ( $data );
-    $data = htmlspecialchars ( $data );
-    $data = strip_tags ( $data );
-    return $data;
-}
-
 function validation () {
     if ( $_SERVER["REQUEST_METHOD"] == "POST" && !empty( $_POST["username"] ) && !empty( $_POST["password"] ) ) {
         $username = testInput ( $_POST["username"] );

@@ -15,6 +15,29 @@ else {
     header( 'Content-Type: text/html; charset=utf-8' );
 }
 
+function saveProduct ( $conn ) {
+    $title = testInput ( $_POST["title"] );
+    $description = testInput ( $_POST["description"] );
+    $price = testInput ( $_POST["price"] );
+    try {
+        $stmt = $conn->prepare( "INSERT INTO products( title, description, price) VALUES ( :title, :description, :price )" );
+        $stmt->execute( array ( ':title' => $title, ':description' => $description, ':price' => $price ) );
+    }
+    catch ( PDOException $e ) {
+        echo translate ( "Error: " ) . $e->getMessage();
+    }
+}
+
+if ( isset ( $_POST["save"] ) ) {
+    if ( isset ( $_POST["title"] ) && isset ( $_POST["description"] ) && isset ( $_POST["price"] ) && isset ( $_POST["browse"] ) &&
+        !empty ( $_POST["title"] ) && !empty ( $_POST["description"] ) && !empty ( $_POST["price"] ) && !empty ( $_POST["browse"] ) ) {
+        saveProduct ( $conn );
+    }
+    else {
+        echo translate ( "Empty field/fields" );
+    }
+}
+
 ?>
 
 <html>
@@ -32,11 +55,10 @@ else {
             <br>
             <input type="number" name="price" placeholder="<?= translate ( "Price" ) ?>">
             <br>
-            <input type="url" name="image" placeholder="<?= translate ( "Image" ) ?>">
-            <input type="button" name="browse" value="<?= translate ( "Browse" ) ?>">
+            <input type="file" name="browse" accept="image/jpeg" value="<?= translate ( "Browse" ) ?>">
             <br>
             <a href="products.php"><?= translate ( "Products" ) ?></a>
-            <input type="button" name="save" value="<?= translate ( "Save" ) ?>">
+            <input type="submit" name="save" value="<?= translate ( "Save" ) ?>">
         </form>
     </body>
 </html>
