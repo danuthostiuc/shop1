@@ -33,6 +33,21 @@ catch( PDOException $e ) {
     echo "Error: " . $e->getMessage();
 }
 
+function sendEmail() {
+    $to = SHOP_EMAIL;
+    $subject = "Test";
+    $message = file_get_contents('cart.php');
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    $headers .= 'From: <webmaster@example.com>' . "\r\n";
+    $headers .= 'Cc: myboss@example.com' . "\r\n";
+    mail( $to, $subject, $message, $headers );
+}
+
+if ( isset( $_GET["checkout"] ) ) {
+    sendEmail();
+}
+
 ?>
 
 <html>
@@ -63,6 +78,6 @@ catch( PDOException $e ) {
             <?php endforeach; ?>
             </table>
             <a href="index.php"> <?= translate( "Go to index" ) ?></a>
-            <button type="submit"> <?= translate( "Checkout" ) ?> </button>
+            <a href="cart.php?checkout"> <?= translate( "Checkout" ) ?> </a>
         </body>
 </html>
