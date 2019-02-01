@@ -1,14 +1,13 @@
 <?php
-require_once( 'common.php' );
+require_once( "common.php" );
 
 function addToCart() {
-    if (isset($_GET['id']) & !empty($_GET['id'])) {
-        $items = $_GET['id'];
-        array_push($_SESSION['cart'], $items);
+    if ( !empty ( $_GET["id"] ) ) {
+        array_push ( $_SESSION["cart"], $_GET["id"] );
     }
 }
 
-if (isset($_GET['add'])) {
+if ( isset ( $_GET["id"] ) ) {
     addToCart();
 }
 
@@ -67,7 +66,7 @@ $stmt = displayProducts ( $conn );
                         </ul>
                     </td>
                     <td class="cp_img">
-                        <a href="index.php?add&id=<?= $row["id"] ?>" class=""><?= translate( "Add" ) ?></a>
+                        <a href="index.php?id=<?= $row["id"] ?>" class=""><?= translate( "Add" ) ?></a>
                     </td>
                 </tr>
             <?php endforeach; ?>
