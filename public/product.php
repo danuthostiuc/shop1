@@ -28,10 +28,36 @@ function saveProduct ( $conn ) {
     }
 }
 
-if ( isset ( $_POST["save"] ) ) {
+if ( isset ( $_POST["add"] ) ) {
     if ( isset ( $_POST["title"] ) && isset ( $_POST["description"] ) && isset ( $_POST["price"] ) && isset ( $_POST["browse"] ) &&
         !empty ( $_POST["title"] ) && !empty ( $_POST["description"] ) && !empty ( $_POST["price"] ) && !empty ( $_POST["browse"] ) ) {
         saveProduct ( $conn );
+        header ( "Location: products.php " );
+    }
+    else {
+        echo translate ( "Empty field/fields" );
+    }
+}
+
+function editProduct ( $conn ) {
+    $title = testInput ( $_POST["title"] );
+    $description = testInput ( $_POST["description"] );
+    $price = testInput ( $_POST["price"] );
+    try {
+        $sql = "UPDATE products SET title=?, description=?, price=? WHERE id=?";
+        $stmt = $conn->prepare( $sql );
+        $stmt->execute( [$title, $description, $price, $_SESSION["id"]] );
+    } catch ( PDOException $e ) {
+        echo translate ( "Error: " ) . $e->getMessage();
+    }
+}
+
+if ( isset ( $_POST["edit"] ) ) {
+    if ( isset ( $_POST["title"] ) && isset ( $_POST["description"] ) && isset ( $_POST["price"] ) && isset ( $_POST["browse"] ) &&
+        !empty ( $_POST["title"] ) && !empty ( $_POST["description"] ) && !empty ( $_POST["price"] ) && !empty ( $_POST["browse"] ) ) {
+        editProduct ( $conn );
+        header ( "Location: products.php" );
+        die;
     }
     else {
         echo translate ( "Empty field/fields" );
@@ -48,17 +74,33 @@ if ( isset ( $_POST["save"] ) ) {
         <h1>
             <?= translate( "Product" ) ?>
         </h1>
-        <form method="post" action=" <?= htmlspecialchars ( $_SERVER["PHP_SELF"] ) ?> ">
-            <input type="text" name="title" placeholder= "<?= translate ( "Title" ) ?>" >
-            <br>
-            <input type="text" name="description" placeholder="<?= translate ( "Description" ) ?>">
-            <br>
-            <input type="number" name="price" placeholder="<?= translate ( "Price" ) ?>">
-            <br>
-            <input type="file" name="browse" accept="image/jpeg" value="<?= translate ( "Browse" ) ?>">
-            <br>
-            <a href="products.php"><?= translate ( "Products" ) ?></a>
-            <input type="submit" name="save" value="<?= translate ( "Save" ) ?>">
-        </form>
+        <?php if ( isset ( $_GET["add"] ) ): ?>
+            <form method="post" action=" <?= htmlspecialchars ( $_SERVER["PHP_SELF"] ) ?> ">
+                <input type="text" name="title" placeholder= "<?= translate ( "Title" ) ?>" >
+                <br>
+                <input type="text" name="description" placeholder="<?= translate ( "Description" ) ?>">
+                <br>
+                <input type="number" name="price" placeholder="<?= translate ( "Price" ) ?>">
+                <br>
+                <input type="file" name="browse" accept="image/jpeg" value="<?= translate ( "Browse" ) ?>">
+                <br>
+                <a href="products.php"><?= translate ( "Products" ) ?></a>
+                <input type="submit" name="add" value="<?= translate ( "Save" ) ?>">
+            </form>
+        <?php elseif ( isset ( $_GET["edit"] ) ): ?>
+            <?php $_SESSION["id"] = !isset ( $_SESSION["id"] ) ? $_GET["id"] : "default"  ?>
+            <form method="post" action=" <?= htmlspecialchars ( $_SERVER["PHP_SELF"] ) ?> ">
+                <input type="text" name="title" placeholder= "<?= translate ( "Title" ) ?>" >
+                <br>
+                <input type="text" name="description" placeholder="<?= translate ( "Description" ) ?>">
+                <br>
+                <input type="number" name="price" placeholder="<?= translate ( "Price" ) ?>">
+                <br>
+                <input type="file" name="browse" accept="image/jpeg" value="<?= translate ( "Browse" ) ?>">
+                <br>
+                <a href="products.php"><?= translate ( "Products" ) ?></a>
+                <input type="submit" name="edit" value="<?= translate ( "Save" ) ?>">
+            </form>
+        <?php endif; ?>
     </body>
 </html>
