@@ -5,25 +5,25 @@
  * Date: 2019-01-28
  * Time: 3:48 PM
  */
-require_once ( 'common.php' );
+require_once ( "common.php" );
 
-function removeFromCart() {
-    if ( isset( $_GET["id"] ) && !empty( $_GET["id"] ) ) {
-        if ( ($key = array_search( $_GET["id"], $_SESSION["cart"] ) ) !== false ) {
-            array_splice( $_SESSION["cart"], $key, 1 );
+function removeFromCart () {
+    if ( isset ( $_GET["id"] ) && !empty( $_GET["id"] ) ) {
+        if ( ( $key = array_search( $_GET["id"], $_SESSION["cart"] ) ) !== false ) {
+            array_splice ( $_SESSION["cart"], $key, 1 );
         } else {
             echo translate ( "Failed to delete element" );
         }
     }
 }
 
-if ( isset( $_GET["remove"] ) ) {
-    removeFromCart();
+if ( isset ( $_GET["remove"] ) ) {
+    removeFromCart ();
 }
 
 function displayCartProducts ( $conn ) {
     $items = $_SESSION["cart"];
-    $place_holders = implode( ',', array_fill(0, count($items), '?' ) );
+    $place_holders = implode ( ',', array_fill (0, count($items), '?' ) );
 
     if( !empty ( $place_holders ) ) {
         try {
@@ -31,7 +31,7 @@ function displayCartProducts ( $conn ) {
             $stmt->execute( $items );
             $stmt->setFetchMode( PDO::FETCH_ASSOC );
         } catch ( PDOException $e ) {
-            echo translate( "Error: " ) . $e->getMessage();
+            echo translate ( "Error: " ) . $e->getMessage();
         } finally {
             return $stmt;
         }
@@ -48,8 +48,6 @@ function displayCartProducts ( $conn ) {
         }
     }
 }
-
-$stmt = displayCartProducts( $conn );
 
 function sendEmail( $stmt ) {
     $to = SHOP_EMAIL;
@@ -75,6 +73,8 @@ if ( isset( $_GET["checkout"] ) ) {
     sendEmail ( $stmt );
 }
 
+$stmt = displayCartProducts( $conn );
+
 ?>
 
 <html>
@@ -89,7 +89,7 @@ if ( isset( $_GET["checkout"] ) ) {
             <?php foreach ( $stmt->fetchAll() as $row ): ?>
             <tr>
                 <td class="cp_img">
-                    <img src="img/<?=$row["id"]?>.jpg"/>
+                    <img src="img/<?=$row["id"]?>.jpg" alt="" />
                 </td>
                 <td class="cp_img">
                     <ul>
