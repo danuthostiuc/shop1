@@ -7,7 +7,7 @@
  */
 require_once ("common.php");
 
-function validation () {
+function loginValidation () {
     if ( $_SERVER["REQUEST_METHOD"] == "POST" && !empty( $_POST["username"] ) && !empty( $_POST["password"] ) ) {
         $username = testInput ( $_POST["username"] );
         $password = testInput ( $_POST["password"] );
@@ -21,19 +21,19 @@ function validation () {
         }
     }
     else {
-        echo translate ( "Empty field" );
+        echo translate ( "Empty field/fields" );
     }
 }
 
 if ( isset ( $_POST["Submit"] ) ) {
-    validation();
+    loginValidation();
 }
 
 ?>
 
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="<?= CSS_PATH ?>">
     </head>
     <body>
         <h1>

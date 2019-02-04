@@ -22,7 +22,7 @@ if ( isset ( $_GET["remove"] ) ) {
 }
 
 function sendEmail ( $stmt ) {
-    $to = ( empty ( $_POST["contact"] ) ) ? "default" : $_POST["contact"];
+    $to = ( empty ( $_POST["contact"] ) ) ? "default" : testInput( $_POST["contact"] );
     $subject = "Test";
     $message1 = '<html><head><link rel="stylesheet" type="text/css" href=""></head><body>';
     $message1 .= '<h1>' . translate( "Cart" ) . '</h1>';
@@ -51,7 +51,7 @@ if ( isset ( $_GET["checkout"] ) ) {
 
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="<?= CSS_PATH ?>">
     </head>
         <body>
             <h1>
@@ -82,9 +82,9 @@ if ( isset ( $_GET["checkout"] ) ) {
                 <br>
                 <input type="text" name="contact" placeholder= "<?= translate ( "Contact details" ) ?>">
                 <br>
-                <input type="text" name="comments" placeholder= "<?= translate ( "Comments" ) ?>">
+                <input type="text" name="comment" placeholder= "<?= translate ( "Comments" ) ?>">
                 <br>
-                <input type="submit" name="checkout" value="<?= translate ( "Checkout" ) ?>">
+                <input type="submit" name="checkout" value= "<?= translate ( "Checkout" ) ?>">
             </form>
 
             <a href="index.php"> <?= translate ( "Go to index" ) ?></a>

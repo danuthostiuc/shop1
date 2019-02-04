@@ -68,7 +68,7 @@ if ( isset ( $_POST["edit"] ) ) {
 
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="css/style.css">
+        <link rel="stylesheet" type="text/css" href="<?= CSS_PATH ?>">
     </head>
     <body>
         <h1>
