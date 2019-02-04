@@ -34,3 +34,31 @@ try {
 catch( PDOException $e ) {
     echo "Connection failed: " . $e->getMessage();
 }
+
+function fetchCartProducts ( $conn ) {
+    $items = $_SESSION["cart"];
+    $place_holders = implode ( ',', array_fill (0, count($items), '?' ) );
+
+    if( !empty ( $place_holders ) ) {
+        try {
+            $stmt = $conn->prepare( "SELECT * FROM products WHERE id IN ( $place_holders )" );
+            $stmt->execute( $items );
+            $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        } catch ( PDOException $e ) {
+            echo translate ( "Error: " ) . $e->getMessage();
+        } finally {
+            return $stmt;
+        }
+    }
+    else {
+        try {
+            $stmt = $conn->prepare( "SELECT * FROM products WHERE id IN ( 0 )" );
+            $stmt->execute();
+            $stmt->setFetchMode( PDO::FETCH_ASSOC );
+        } catch ( PDOException $e ) {
+            echo translate( "Error: " ) . $e->getMessage();
+        } finally {
+            return $stmt;
+        }
+    }
+}

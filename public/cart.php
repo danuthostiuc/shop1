@@ -8,7 +8,7 @@
 require_once ( "common.php" );
 
 function removeFromCart () {
-    if ( isset ( $_GET["id"] ) && !empty( $_GET["id"] ) ) {
+    if ( isset ( $_GET["id"] ) && !empty ( $_GET["id"] ) ) {
         if ( ( $key = array_search( $_GET["id"], $_SESSION["cart"] ) ) !== false ) {
             array_splice ( $_SESSION["cart"], $key, 1 );
         } else {
@@ -21,36 +21,8 @@ if ( isset ( $_GET["remove"] ) ) {
     removeFromCart ();
 }
 
-function fetchCartProducts ( $conn ) {
-    $items = $_SESSION["cart"];
-    $place_holders = implode ( ',', array_fill (0, count($items), '?' ) );
-
-    if( !empty ( $place_holders ) ) {
-        try {
-            $stmt = $conn->prepare( "SELECT * FROM products WHERE id IN ( $place_holders )" );
-            $stmt->execute( $items );
-            $stmt->setFetchMode( PDO::FETCH_ASSOC );
-        } catch ( PDOException $e ) {
-            echo translate ( "Error: " ) . $e->getMessage();
-        } finally {
-            return $stmt;
-        }
-    }
-    else {
-        try {
-            $stmt = $conn->prepare( "SELECT * FROM products WHERE id IN ( 0 )" );
-            $stmt->execute();
-            $stmt->setFetchMode( PDO::FETCH_ASSOC );
-        } catch ( PDOException $e ) {
-            echo translate( "Error: " ) . $e->getMessage();
-        } finally {
-            return $stmt;
-        }
-    }
-}
-
-function sendEmail( $stmt ) {
-    $to = SHOP_EMAIL;
+function sendEmail ( $stmt ) {
+    $to = ( empty ( $_POST["contact"] ) ) ? "default" : $_POST["contact"];
     $subject = "Test";
     $message1 = '<html><head><link rel="stylesheet" type="text/css" href=""></head><body>';
     $message1 .= '<h1>' . translate( "Cart" ) . '</h1>';
@@ -69,9 +41,9 @@ function sendEmail( $stmt ) {
     mail( $to, $subject, $message, $headers );
 }
 
-$stmt = fetchCartProducts( $conn );
+$stmt = fetchCartProducts ( $conn );
 
-if ( isset( $_GET["checkout"] ) ) {
+if ( isset ( $_GET["checkout"] ) ) {
     sendEmail ( $stmt );
 }
 
@@ -83,7 +55,7 @@ if ( isset( $_GET["checkout"] ) ) {
     </head>
         <body>
             <h1>
-                <?= translate( "Cart" ) ?>
+                <?= translate ( "Cart" ) ?>
             </h1>
             <table>
             <?php foreach ( $stmt->fetchAll() as $row ): ?>
@@ -93,20 +65,20 @@ if ( isset( $_GET["checkout"] ) ) {
                 </td>
                 <td class="cp_img">
                     <ul>
-                        <li><?= translate( $row["title"] ) ?></li>
-                        <li><?= translate( $row["description"] ) ?></li>
-                        <li><?= translate( $row["price"] ) ?></li>
+                        <li><?= translate ( $row["title"] ) ?></li>
+                        <li><?= translate ( $row["description"] ) ?></li>
+                        <li><?= translate ( $row["price"] ) ?></li>
                     </ul>
                 </td>
                 <td class="cp_img">
-                    <a href="cart.php?remove&id=<?= $row["id"] ?>" class=""><?= translate( "Remove" )?></a>
+                    <a href="cart.php?remove&id=<?= $row["id"] ?>" class=""><?= translate( "Remove" ) ?></a>
                 </td>
             </tr>
             <?php endforeach; ?>
             </table>
-
+            <br>
             <form method="post" action="order.php">
-                <input type="text" name="name" placeholder= "<?= translate ( "Name" ) ?>" >
+                <input type="text" name="name" placeholder= "<?= translate ( "Name" ) ?>">
                 <br>
                 <input type="text" name="contact" placeholder= "<?= translate ( "Contact details" ) ?>">
                 <br>
@@ -115,7 +87,7 @@ if ( isset( $_GET["checkout"] ) ) {
                 <input type="submit" name="checkout" value="<?= translate ( "Checkout" ) ?>">
             </form>
 
-            <a href="index.php"> <?= translate( "Go to index" ) ?> </a>
-            <a href="login.php"> <?= translate( "Log In" ) ?></a>
+            <a href="index.php"> <?= translate ( "Go to index" ) ?></a>
+            <a href="login.php"> <?= translate ( "Log In" ) ?></a>
         </body>
 </html>
