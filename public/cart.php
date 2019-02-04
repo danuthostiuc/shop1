@@ -21,7 +21,7 @@ if ( isset ( $_GET["remove"] ) ) {
     removeFromCart ();
 }
 
-function displayCartProducts ( $conn ) {
+function fetchCartProducts ( $conn ) {
     $items = $_SESSION["cart"];
     $place_holders = implode ( ',', array_fill (0, count($items), '?' ) );
 
@@ -69,11 +69,11 @@ function sendEmail( $stmt ) {
     mail( $to, $subject, $message, $headers );
 }
 
+$stmt = fetchCartProducts( $conn );
+
 if ( isset( $_GET["checkout"] ) ) {
     sendEmail ( $stmt );
 }
-
-$stmt = displayCartProducts( $conn );
 
 ?>
 
@@ -104,8 +104,18 @@ $stmt = displayCartProducts( $conn );
             </tr>
             <?php endforeach; ?>
             </table>
+
+            <form method="post" action="order.php">
+                <input type="text" name="name" placeholder= "<?= translate ( "Name" ) ?>" >
+                <br>
+                <input type="text" name="contact" placeholder= "<?= translate ( "Contact details" ) ?>">
+                <br>
+                <input type="text" name="comments" placeholder= "<?= translate ( "Comments" ) ?>">
+                <br>
+                <input type="submit" name="checkout" value="<?= translate ( "Checkout" ) ?>">
+            </form>
+
             <a href="index.php"> <?= translate( "Go to index" ) ?> </a>
-            <a href="cart.php?checkout"> <?= translate( "Checkout" ) ?> </a>
             <a href="login.php"> <?= translate( "Log In" ) ?></a>
         </body>
 </html>

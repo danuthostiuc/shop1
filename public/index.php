@@ -11,7 +11,11 @@ if ( isset ( $_GET["id"] ) ) {
     addToCart();
 }
 
-function displayProducts ( $conn ) {
+if ( isset ( $_GET["logout"] ) ) {
+    $_SESSION[ADMIN_NAME] = 0;
+}
+
+function fetchProducts ( $conn ) {
     if( count( $_SESSION["cart"] ) > 0 ) {
         $place_holders = implode( ',', array_fill( 0, count($_SESSION["cart"] ), '?') );
         try {
@@ -40,7 +44,7 @@ function displayProducts ( $conn ) {
     }
 }
 
-$stmt = displayProducts ( $conn );
+$stmt = fetchProducts ( $conn );
 
 ?>
 

@@ -17,7 +17,7 @@ function validation () {
             die;
         }
         else {
-            echo translate (" Wrong username or password" );
+            echo translate ( "Wrong username or password" );
         }
     }
     else {
