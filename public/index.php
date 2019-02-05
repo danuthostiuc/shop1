@@ -54,7 +54,7 @@ $stmt = fetchProducts ( $conn );
     </head>
     <body>
         <h1>
-            <?= translate( "Products" ) ?>
+            <?= translate( "Index" ) ?>
         </h1>
         <table>
             <?php foreach ( $stmt->fetchAll() as $row ): ?>

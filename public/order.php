@@ -25,7 +25,12 @@ if ( isset ( $_POST["checkout"] ) ) {
     list ( $name, $contact, $comment ) = orderValidation();
 }
 
-$stmt = fetchCartProducts ( $conn );
+$object = new order();
+$object->setName ( $name );
+$object->setContact ( $contact );
+$object->setComment ( $comment );
+$object->setStmt ( fetchCartProducts ( $conn ) );
+array_push( $_SESSION["orders"], $object );
 
 ?>
 
@@ -37,41 +42,41 @@ $stmt = fetchCartProducts ( $conn );
             <h1>
                 <?= translate ( "Order" ) ?>
             </h1>
-            <table>
+<!--            <table>
                 <tr>
-                    <th> <?= translate ( "Name" ) ?> </th>
-                    <th> <?= translate ( "Contact details" ) ?> </th>
-                    <th> <?= translate ( "Comments" ) ?> </th>
-                    <th colspan="3"> <?= translate ( "Products" ) ?> </th>
+                    <th> <?/*= translate ( "Name" ) */?> </th>
+                    <th> <?/*= translate ( "Contact details" ) */?> </th>
+                    <th> <?/*= translate ( "Comments" ) */?> </th>
+                    <th colspan="3"> <?/*= translate ( "Products" ) */?> </th>
                 </tr>
                 <tr>
-                    <td rowspan="<?= count( $_SESSION["cart"] ) ?>" class="cp_img">
-                        <?= translate ( $name ) ?>
+                    <td rowspan="<?/*= count( $_SESSION["cart"] ) */?>" class="cp_img">
+                        <?/*= translate ( $name ) */?>
                     </td>
-                    <td rowspan="<?= count( $_SESSION["cart"] ) ?>" class="cp_img">
-                        <?= translate ( $contact ) ?>
+                    <td rowspan="<?/*= count( $_SESSION["cart"] ) */?>" class="cp_img">
+                        <?/*= translate ( $contact ) */?>
                     </td>
-                    <td rowspan="<?= count( $_SESSION["cart"] ) ?>" class="cp_img">
-                        <?= translate ( $comment ) ?>
+                    <td rowspan="<?/*= count( $_SESSION["cart"] ) */?>" class="cp_img">
+                        <?/*= translate ( $comment ) */?>
                     </td>
-                    <?php foreach ( $stmt->fetchAll() as $row ): ?>
+                    <?php /*foreach ( $stmt->fetchAll() as $row ): */?>
                         <td class="cp_img">
-                            <img src="img/<?=$row["id"]?>.jpg" alt="<?= translate ( "Image" ) ?>" />
+                            <img src="img/<?/*=$row["id"]*/?>.jpg" alt="<?/*= translate ( "Image" ) */?>" />
                         </td>
                         <td class="cp_img">
                             <ul>
-                                <li><?= translate ( $row["title"] ) ?></li>
-                                <li><?= translate ( $row["description"] ) ?></li>
-                                <li><?= translate ( $row["price"] ) ?></li>
+                                <li><?/*= translate ( $row["title"] ) */?></li>
+                                <li><?/*= translate ( $row["description"] ) */?></li>
+                                <li><?/*= translate ( $row["price"] ) */?></li>
                             </ul>
                         </td>
                         <td class="cp_img">
-                            <a href="cart.php?remove&id=<?= $row["id"] ?>" class=""><?= translate( "Remove" ) ?></a>
+                            <a href="cart.php?remove&id=<?/*= $row["id"] */?>" class=""><?/*= translate( "Remove" ) */?></a>
                         </td>
                 </tr>
-                    <?php endforeach; ?>
-            </table>
-            <br>
+                    <?php /*endforeach; */?>
+            </table>-->
+            <?= $object->displayOrder () ?>
 
             <a href="index.php"> <?= translate ( "Go to index" ) ?></a>
             <a href="login.php"> <?= translate ( "Log In" ) ?></a>
