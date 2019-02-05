@@ -42,40 +42,7 @@ array_push( $_SESSION["orders"], $object );
             <h1>
                 <?= translate ( "Order" ) ?>
             </h1>
-<!--            <table>
-                <tr>
-                    <th> <?/*= translate ( "Name" ) */?> </th>
-                    <th> <?/*= translate ( "Contact details" ) */?> </th>
-                    <th> <?/*= translate ( "Comments" ) */?> </th>
-                    <th colspan="3"> <?/*= translate ( "Products" ) */?> </th>
-                </tr>
-                <tr>
-                    <td rowspan="<?/*= count( $_SESSION["cart"] ) */?>" class="cp_img">
-                        <?/*= translate ( $name ) */?>
-                    </td>
-                    <td rowspan="<?/*= count( $_SESSION["cart"] ) */?>" class="cp_img">
-                        <?/*= translate ( $contact ) */?>
-                    </td>
-                    <td rowspan="<?/*= count( $_SESSION["cart"] ) */?>" class="cp_img">
-                        <?/*= translate ( $comment ) */?>
-                    </td>
-                    <?php /*foreach ( $stmt->fetchAll() as $row ): */?>
-                        <td class="cp_img">
-                            <img src="img/<?/*=$row["id"]*/?>.jpg" alt="<?/*= translate ( "Image" ) */?>" />
-                        </td>
-                        <td class="cp_img">
-                            <ul>
-                                <li><?/*= translate ( $row["title"] ) */?></li>
-                                <li><?/*= translate ( $row["description"] ) */?></li>
-                                <li><?/*= translate ( $row["price"] ) */?></li>
-                            </ul>
-                        </td>
-                        <td class="cp_img">
-                            <a href="cart.php?remove&id=<?/*= $row["id"] */?>" class=""><?/*= translate( "Remove" ) */?></a>
-                        </td>
-                </tr>
-                    <?php /*endforeach; */?>
-            </table>-->
+
             <?= $object->displayOrder () ?>
 
             <a href="index.php"> <?= translate ( "Go to index" ) ?></a>

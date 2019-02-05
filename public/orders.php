@@ -25,8 +25,6 @@ require_once ( "common.php" );
         <?= $it->displayOrder (); ?>
         <?php endforeach; ?>
 
-        <?php var_dump ( $_SESSION["orders"] ); ?>
-
         <a href="index.php"> <?= translate ( "Go to index" ) ?></a>
         <a href="login.php"> <?= translate ( "Log In" ) ?></a>
     </body>
