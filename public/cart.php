@@ -49,8 +49,8 @@ if (isset ($_GET["checkout"])) {
     }
     $message3 = '</table></body></html>';
     $message = $message1 . $message2 . $message3;
-    $headers = 'From: <webmaster@example.com>' . "\r\n";
-    $headers .= 'Cc: myboss@example.com' . "\r\n";
+    $headers = "From: <webmaster@example.com>" . "\r\n";
+    $headers .= "Cc: myboss@example.com" . "\r\n";
     mail($to, $subject, $message, $headers);
 }
 
@@ -71,7 +71,7 @@ if (isset ($_GET["checkout"])) {
         <?php foreach ($stmt->fetchAll() as $row): ?>
             <tr>
                 <td class="cp_img">
-                    <img src="img/<?= $row["image"] ?>.jpg"/>
+                    <img src="img/<?= $row["image"] ?>"/>
                 </td>
                 <td class="cp_img">
                     <ul>

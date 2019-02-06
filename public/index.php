@@ -40,7 +40,7 @@ if (count($_SESSION["cart"]) > 0) {
         <?php foreach ($stmt->fetchAll() as $row): ?>
             <tr>
                 <td class="cp_img">
-                    <img src="img/<?= $row["image"] ?>.jpg"/>
+                    <img src="img/<?= $row["image"] ?>"/>
                 </td>
                 <td class="cp_img">
                     <ul>
