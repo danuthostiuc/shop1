@@ -2,13 +2,7 @@
 require_once("common.php");
 
 if (isset ($_GET["id"])) {
-    if (!empty ($_GET["id"])) {
-        array_push($_SESSION["cart"], $_GET["id"]);
-    }
-}
-
-if (isset ($_GET["logout"])) {
-    unset ($_SESSION['ADMIN']);
+    array_push($_SESSION["cart"], $_GET["id"]);
 }
 
 if (count($_SESSION["cart"]) > 0) {
@@ -40,8 +34,8 @@ if (count($_SESSION["cart"]) > 0) {
     <?= translate("Index") ?>
 </h1>
 <table>
-    <?php if (!empty($err)): ?>
-        <?= $err ?>
+    <?php if (!empty($err_conn_database) && !empty($err)): ?>
+        <?= $err_conn_database, $err ?>
     <?php else: ?>
         <?php foreach ($stmt->fetchAll() as $row): ?>
             <tr>
@@ -63,6 +57,5 @@ if (count($_SESSION["cart"]) > 0) {
     <?php endif; ?>
 </table>
 <a href="cart.php"> <?= translate("Go to cart") ?></a>
-<a href="login.php"> <?= translate("Log In") ?></a>
 </body>
 </html>
