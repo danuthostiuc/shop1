@@ -39,18 +39,16 @@ if (isset ($_POST["checkout"])) {
     $protocol = stripos($_SERVER["SERVER_PROTOCOL"], "https") === true ? "https://" : "http://";
     $to = $_POST["contact"];
     $subject = "Test";
-    $message = '<html><head></head><body>';
-    $message .= '<h1>' . translate("Cart") . '</h1>';
-    $message .= '<table>';
+    $message = '<html><head></head><body>' . '<h1>' . translate("Cart") . '</h1>' . '<table>';
     foreach ($stmt->fetchAll() as $row) {
-        $message .= '<tr><td><img src="' . $protocol . $_SERVER["HTTP_HOST"] . '/img/' . $row["image"] . '" width="600" border="0" style="display: block; /></td>';
-        $message .= '<td><ul><li>' . $row["title"] . '</li><li>' . $row["description"] . '</li><li>' . $row["price"] . '</li></ul></td></tr>';
+        $message .= '<tr><td><img src="' . $protocol . $_SERVER["HTTP_HOST"] . '/img/' . $row["image"]
+            . '" width="600" border="0" style="display: block; /></td>'
+            . '<td><ul><li>' . $row["title"] . '</li><li>' . $row["description"] . '</li><li>' . $row["price"]
+            . '</li></ul></td></tr>';
     }
     $message .= '</table></body></html>';
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= "From: <webmaster@example.com>" . "\r\n";
-    $headers .= "Cc: myboss@example.com" . "\r\n";
+    $headers = "MIME-Version: 1.0" . "\r\n" . "Content-type:text/html;charset=UTF-8" . "\r\n"
+        . "From: <webmaster@example.com>" . "\r\n" . "Cc: myboss@example.com" . "\r\n";
     mail($to, $subject, $message, $headers);
 }
 
