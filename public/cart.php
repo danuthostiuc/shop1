@@ -5,32 +5,34 @@
  * Date: 2019-01-28
  * Time: 3:48 PM
  */
-require_once ( "common.php" );
+require_once("common.php");
 
-function removeFromCart () {
-    if ( isset ( $_GET["id"] ) && !empty ( $_GET["id"] ) ) {
-        if ( ( $key = array_search( $_GET["id"], $_SESSION["cart"] ) ) !== false ) {
-            array_splice ( $_SESSION["cart"], $key, 1 );
+function removeFromCart()
+{
+    if (isset ($_GET["id"]) && !empty ($_GET["id"])) {
+        if (($key = array_search($_GET["id"], $_SESSION["cart"])) !== false) {
+            array_splice($_SESSION["cart"], $key, 1);
         } else {
-            echo translate ( "Failed to delete element" );
+            echo translate("Failed to delete element");
         }
     }
 }
 
-if ( isset ( $_GET["remove"] ) ) {
-    removeFromCart ();
+if (isset ($_GET["remove"])) {
+    removeFromCart();
 }
 
-function sendEmail ( $stmt ) {
-    $to = ( empty ( $_POST["contact"] ) ) ? "default" : testInput( $_POST["contact"] );
+function sendEmail($stmt)
+{
+    $to = (empty ($_POST["contact"])) ? "default" : testInput($_POST["contact"]);
     $subject = "Test";
     $message1 = '<html><head><link rel="stylesheet" type="text/css" href=""></head><body>';
-    $message1 .= '<h1>' . translate( "Cart" ) . '</h1>';
+    $message1 .= '<h1>' . translate("Cart") . '</h1>';
     $message2 = '<table rules="all" style="border-color: #666;" cellpadding="10">';
-    foreach ( $stmt->fetchAll() as $row ):
+    foreach ($stmt->fetchAll() as $row):
         $message2 .= '<tr><td class=""><img src="img/"' . $row["id"] . '".jpg"/></td>';
-        $message2 .= '<td class=""><ul><li>' . translate( $row["title"] ) . '</li><li>' . translate( $row["description"] ) . '</li><li>' . translate( $row["price"] ) . '</li></ul></td>';
-        $message2 .= '<td class=""><a href="cart.php?remove&id=' . $row["id"] . 'class="">' . translate( "Remove" ) . '</a></td></tr>';
+        $message2 .= '<td class=""><ul><li>' . translate($row["title"]) . '</li><li>' . translate($row["description"]) . '</li><li>' . translate($row["price"]) . '</li></ul></td>';
+        $message2 .= '<td class=""><a href="cart.php?remove&id=' . $row["id"] . 'class="">' . translate("Remove") . '</a></td></tr>';
     endforeach;
     $message3 = '</table></body></html>';
     $message = $message1 . $message2 . $message3;
@@ -38,56 +40,56 @@ function sendEmail ( $stmt ) {
     $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
     $headers .= 'From: <webmaster@example.com>' . "\r\n";
     $headers .= 'Cc: myboss@example.com' . "\r\n";
-    mail( $to, $subject, $message, $headers );
+    mail($to, $subject, $message, $headers);
 }
 
-$stmt = fetchCartProducts ( $conn );
+$stmt = fetchCartProducts($conn);
 
-if ( isset ( $_GET["checkout"] ) ) {
-    sendEmail ( $stmt );
+if (isset ($_GET["checkout"])) {
+    sendEmail($stmt);
 }
 
 ?>
 
 <html>
-    <head>
-        <link rel="stylesheet" type="text/css" href="<?= CSS_PATH ?>">
-    </head>
-        <body>
-            <h1>
-                <?= translate ( "Cart" ) ?>
-            </h1>
-            <table>
-            <?php foreach ( $stmt->fetchAll() as $row ): ?>
-            <tr>
-                <td class="cp_img">
-                    <img src="img/<?=$row["id"]?>.jpg" alt="" />
-                </td>
-                <td class="cp_img">
-                    <ul>
-                        <li><?= translate ( $row["title"] ) ?></li>
-                        <li><?= translate ( $row["description"] ) ?></li>
-                        <li><?= translate ( $row["price"] ) ?></li>
-                    </ul>
-                </td>
-                <td class="cp_img">
-                    <a href="cart.php?remove&id=<?= $row["id"] ?>" class=""><?= translate( "Remove" ) ?></a>
-                </td>
-            </tr>
-            <?php endforeach; ?>
-            </table>
-            <br>
-            <form method="post" action="order.php">
-                <input type="text" name="name" placeholder= "<?= translate ( "Name" ) ?>">
-                <br>
-                <input type="text" name="contact" placeholder= "<?= translate ( "Contact details" ) ?>">
-                <br>
-                <input type="text" name="comment" placeholder= "<?= translate ( "Comments" ) ?>">
-                <br>
-                <input type="submit" name="checkout" value= "<?= translate ( "Checkout" ) ?>">
-            </form>
+<head>
+    <link rel="stylesheet" type="text/css" href="<?= CSS_PATH ?>">
+</head>
+<body>
+<h1>
+    <?= translate("Cart") ?>
+</h1>
+<table>
+    <?php foreach ($stmt->fetchAll() as $row): ?>
+        <tr>
+            <td class="cp_img">
+                <img src="img/<?= $row["id"] ?>.jpg" alt=""/>
+            </td>
+            <td class="cp_img">
+                <ul>
+                    <li><?= translate($row["title"]) ?></li>
+                    <li><?= translate($row["description"]) ?></li>
+                    <li><?= translate($row["price"]) ?></li>
+                </ul>
+            </td>
+            <td class="cp_img">
+                <a href="cart.php?remove&id=<?= $row["id"] ?>" class=""><?= translate("Remove") ?></a>
+            </td>
+        </tr>
+    <?php endforeach; ?>
+</table>
+<br>
+<form method="post" action="order.php">
+    <input type="text" name="name" placeholder="<?= translate("Name") ?>">
+    <br>
+    <input type="text" name="contact" placeholder="<?= translate("Contact details") ?>">
+    <br>
+    <input type="text" name="comment" placeholder="<?= translate("Comments") ?>">
+    <br>
+    <input type="submit" name="checkout" value="<?= translate("Checkout") ?>">
+</form>
 
-            <a href="index.php"> <?= translate ( "Go to index" ) ?></a>
-            <a href="login.php"> <?= translate ( "Log In" ) ?></a>
-        </body>
+<a href="index.php"> <?= translate("Go to index") ?></a>
+<a href="login.php"> <?= translate("Log In") ?></a>
+</body>
 </html>
