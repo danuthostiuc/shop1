@@ -2,7 +2,7 @@
 require_once("common.php");
 
 if (isset ($_GET["id"])) {
-    array_push($_SESSION["cart"], $_GET["id"]);
+    $_SESSION["cart"][] = $_GET["id"];
 }
 
 if (count($_SESSION["cart"]) > 0) {
@@ -40,7 +40,7 @@ if (count($_SESSION["cart"]) > 0) {
         <?php foreach ($stmt->fetchAll() as $row): ?>
             <tr>
                 <td class="cp_img">
-                    <img src="https://shop1.local.ro/img/<?= $row["image"] ?>"/>
+                    <img src="img/<?= $row["image"] ?>"/>
                 </td>
                 <td class="cp_img">
                     <ul>

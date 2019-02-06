@@ -35,6 +35,25 @@ if (!empty ($place_holders)) {
     }
 }
 
+if (isset ($_POST["checkout"])) {
+    $protocol = stripos($_SERVER["SERVER_PROTOCOL"], "https") === true ? "https://" : "http://";
+    $to = $_POST["contact"];
+    $subject = "Test";
+    $message = '<html><head></head><body>';
+    $message .= '<h1>' . translate("Cart") . '</h1>';
+    $message .= '<table>';
+    foreach ($stmt->fetchAll() as $row) {
+        $message .= '<tr><td><img src="' . $protocol . $_SERVER["HTTP_HOST"] . '/img/' . $row["image"] . '" width="600" border="0" style="display: block; /></td>';
+        $message .= '<td><ul><li>' . $row["title"] . '</li><li>' . $row["description"] . '</li><li>' . $row["price"] . '</li></ul></td></tr>';
+    }
+    $message .= '</table></body></html>';
+    $headers = "MIME-Version: 1.0" . "\r\n";
+    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    $headers .= "From: <webmaster@example.com>" . "\r\n";
+    $headers .= "Cc: myboss@example.com" . "\r\n";
+    mail($to, $subject, $message, $headers);
+}
+
 ?>
 
 <html>
@@ -52,7 +71,7 @@ if (!empty ($place_holders)) {
         <?php foreach ($stmt->fetchAll() as $row): ?>
             <tr>
                 <td class="cp_img">
-                    <img src="https://shop1.local.ro/img/<?= $row["image"] ?>"/>
+                    <img src="img/<?= $row["image"] ?>"/>
                 </td>
                 <td class="cp_img">
                     <ul>
@@ -72,7 +91,7 @@ if (!empty ($place_holders)) {
     <?php endif; ?>
 </table>
 <br>
-<form method="post" action="order.php">
+<form method="post" action="cart.php">
     <input type="text" name="name" placeholder="<?= translate("Name") ?>">
     <br>
     <input type="text" name="contact" placeholder="<?= translate("Contact details") ?>">

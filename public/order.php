@@ -36,24 +36,6 @@ if (!empty ($place_holders)) {
     }
 }
 
-if (isset ($_POST["checkout"])) {
-    $to = $_POST["contact"];
-    $subject = "Test";
-    $message = '<html><head><link rel="stylesheet" type="text/css" href="https://shop1.local.ro/css/style.css"></head><body>';
-    $message .= '<h1>' . translate("Cart") . '</h1>';
-    $message .= '<table>';
-    foreach ($stmt->fetchAll() as $row) {
-        $message .= '<tr><td class="cp_img"><img src="https://shop1.local.ro/img/' . $row["image"] . '" width="600" border="0" style="display: block; /></td>';
-        $message .= '<td class="cp_img"><ul><li>' . $row["title"] . '</li><li>' . $row["description"] . '</li><li>' . $row["price"] . '</li></ul></td></tr>';
-    }
-    $message .= '</table></body></html>';
-    $headers = "MIME-Version: 1.0" . "\r\n";
-    $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-    $headers .= "From: <webmaster@example.com>" . "\r\n";
-    $headers .= "Cc: myboss@example.com" . "\r\n";
-    mail($to, $subject, $message, $headers);
-}
-
 ?>
 
 <html>
@@ -86,7 +68,7 @@ if (isset ($_POST["checkout"])) {
         </td>
         <?php foreach ($stmt->fetchAll() as $row): ?>
             <td class="cp_img">
-                <img src="https://shop1.local.ro/img/<?= $row["image"] ?>"/>
+                <img src="/img/<?= $row["image"] ?>"/>
             </td>
             <td class="cp_img">
                 <ul>
