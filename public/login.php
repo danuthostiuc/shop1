@@ -12,7 +12,7 @@ if (isset($_SESSION["admin"])) {
     die;
 }
 
-if (isset ($_POST["submit"])) {
+if (isset($_POST["submit"])) {
     if (!empty($_POST["username"]) && !empty($_POST["password"])) {
         $username = testInput($_POST["username"]);
         $password = testInput($_POST["password"]);
@@ -44,7 +44,7 @@ if (isset ($_POST["submit"])) {
     <input type="password" name="password" placeholder="<?= translate("Password") ?>">
     <br>
     <input type="submit" name="submit" value="<?= translate("Login") ?>">
-    <?php if ($php_errormsg): ?>
+    <?php if (!empty($php_errormsg)): ?>
         <?= $php_errormsg ?>
     <?php endif; ?>
 </form>

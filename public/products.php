@@ -31,10 +31,13 @@ if (isset($_GET["id"])) {
     }
 }
 
+$products = [];
+
 try {
     $stmt = $conn->prepare("SELECT * FROM products");
     $stmt->execute();
     $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    $products = $stmt->fetchAll();
 } catch (PDOException $e) {
     $php_errormsg = translate("Error: " . $e->getMessage());
 }
@@ -50,10 +53,10 @@ try {
     <?= translate("Products") ?>
 </h1>
 <table>
-    <?php foreach ($stmt->fetchAll() as $row): ?>
+    <?php foreach ($products as $row): ?>
         <tr>
             <td class="cp_img">
-                <img src="img/<?= $row["id"] ?>.jpg"/>
+                <img src="img/<?= $row["image"] ?>"/>
             </td>
             <td class="cp_img">
                 <ul>
@@ -71,7 +74,7 @@ try {
         </tr>
     <?php endforeach; ?>
 </table>
-<a href="product.php?add"> <?= translate("Add") ?></a>
+<a href="product.php"> <?= translate("Add") ?></a>
 <a href="products.php?logout"> <?= translate("Logout") ?></a>
 </body>
 </html>
