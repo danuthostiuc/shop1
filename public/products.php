@@ -7,66 +7,43 @@
  */
 require_once("common.php");
 
-if (!$_SESSION[ADMIN_NAME]) {
+if (!isset($_SESSION["admin"])) {
     header("Location: login.php");
     die;
-} else {
-    header('Content-Type: text/html; charset=utf-8');
 }
 
 if (isset($_GET["logout"])) {
-    $_SESSION[ADMIN_NAME] = 0;
+    unset($_SESSION["admin"]);
     header("Location: index.php");
     die;
 }
 
-if (isset($_GET["add"])) {
-    header("Location: product.php");
-    die;
-}
-
-if (isset($_GET["edit"])) {
-    header("Location: product.php");
-    die;
-}
-
-function deleteProduct($conn)
-{
+if (isset($_GET["id"])) {
     try {
         $stmt = $conn->prepare("DELETE FROM products WHERE id=?");
         $stmt->bindValue(1, $_GET["id"], PDO::PARAM_INT);
         $stmt->execute();
     } catch (PDOException $e) {
         echo translate("Error: ") . $e->getMessage();
-    }
-}
-
-if (isset($_GET["delete"])) {
-    deleteProduct($conn);
-    header("Location: products.php");
-    die;
-}
-
-function displayAllProducts($conn)
-{
-    try {
-        $stmt = $conn->prepare("SELECT * FROM products");
-        $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        echo translate("Error: ") . $e->getMessage();
     } finally {
-        return $stmt;
+        header("Location: products.php");
+        die;
     }
 }
 
-$stmt = displayAllProducts($conn);
+try {
+    $stmt = $conn->prepare("SELECT * FROM products");
+    $stmt->execute();
+    $stmt->setFetchMode(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $php_errormsg = translate("Error: " . $e->getMessage());
+}
 
 ?>
 
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="<?= CSS_PATH ?>">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 <h1>
@@ -80,21 +57,21 @@ $stmt = displayAllProducts($conn);
             </td>
             <td class="cp_img">
                 <ul>
-                    <li><?= translate($row["title"]) ?></li>
-                    <li><?= translate($row["description"]) ?></li>
-                    <li><?= translate($row["price"]) ?></li>
+                    <li><?= $row["title"] ?></li>
+                    <li><?= $row["description"] ?></li>
+                    <li><?= $row["price"] ?></li>
                 </ul>
             </td>
             <td class="cp_img">
-                <a href="product.php?edit&id=<?= $row["id"] ?>" class=""><?= translate("Edit") ?></a>
+                <a href="product.php?id=<?= $row["id"] ?>" class=""><?= translate("Edit") ?></a>
             </td>
             <td class="cp_img">
-                <a href="products.php?delete&id=<?= $row["id"] ?>" class=""><?= translate("Delete") ?></a>
+                <a href="products.php?id=<?= $row["id"] ?>" class=""><?= translate("Delete") ?></a>
             </td>
         </tr>
     <?php endforeach; ?>
 </table>
 <a href="product.php?add"> <?= translate("Add") ?></a>
-<a href="index.php?logout"> <?= translate("Logout") ?></a>
+<a href="products.php?logout"> <?= translate("Logout") ?></a>
 </body>
 </html>

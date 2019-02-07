@@ -5,6 +5,10 @@
  * Date: 2019-01-28
  * Time: 1:00 PM
  */
+
+error_reporting(E_ALL);
+ini_set('display_errors', 'on');
+
 session_start();
 require_once("config.php");
 

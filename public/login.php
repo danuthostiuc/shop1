@@ -7,43 +7,46 @@
  */
 require_once("common.php");
 
-function loginValidation()
-{
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && !empty($_POST["username"]) && !empty($_POST["password"])) {
+if (isset($_SESSION["admin"])) {
+    header("Location: products.php");
+    die;
+}
+
+if (isset ($_POST["submit"])) {
+    if (!empty($_POST["username"]) && !empty($_POST["password"])) {
         $username = testInput($_POST["username"]);
         $password = testInput($_POST["password"]);
         if ($username == ADMIN_NAME && $password == ADMIN_PWD) {
-            $_SESSION[ADMIN_NAME] = 1;
+            $_SESSION["admin"] = true;
             header("Location: products.php");
             die;
         } else {
-            echo translate("Wrong username or password");
+            $php_errormsg = translate("Wrong username or password!");
         }
     } else {
-        echo translate("Empty field/fields");
+        $php_errormsg = translate("Complete all fields!");
     }
-}
-
-if (isset ($_POST["Submit"])) {
-    loginValidation();
 }
 
 ?>
 
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="<?= CSS_PATH ?>">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 <h1>
     <?= translate("Log In") ?>
 </h1>
-<form method="post" action=" <?= htmlspecialchars($_SERVER["PHP_SELF"]) ?> ">
+<form method="post">
     <input type="text" name="username" placeholder="<?= translate("Username") ?>">
     <br>
     <input type="password" name="password" placeholder="<?= translate("Password") ?>">
     <br>
-    <input type="submit" name="Submit" value="<?= translate("Login") ?>">
+    <input type="submit" name="submit" value="<?= translate("Login") ?>">
+    <?php if ($php_errormsg): ?>
+        <?= $php_errormsg ?>
+    <?php endif; ?>
 </form>
 </body>
 </html>

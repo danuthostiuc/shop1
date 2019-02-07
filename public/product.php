@@ -7,58 +7,48 @@
  */
 require_once("common.php");
 
-if (!$_SESSION[ADMIN_NAME]) {
+if (!isset($_SESSION["admin"])) {
     header("Location: login.php");
     die;
-} else {
-    header('Content-Type: text/html; charset=utf-8');
-}
-
-function saveProduct($conn)
-{
-    $title = testInput($_POST["title"]);
-    $description = testInput($_POST["description"]);
-    $price = testInput($_POST["price"]);
-    try {
-        $stmt = $conn->prepare("INSERT INTO products( title, description, price) VALUES ( :title, :description, :price )");
-        $stmt->execute(array(':title' => $title, ':description' => $description, ':price' => $price));
-    } catch (PDOException $e) {
-        echo translate("Error: ") . $e->getMessage();
-    }
 }
 
 if (isset ($_POST["add"])) {
     if (isset ($_POST["title"]) && isset ($_POST["description"]) && isset ($_POST["price"]) && isset ($_POST["browse"]) &&
         !empty ($_POST["title"]) && !empty ($_POST["description"]) && !empty ($_POST["price"]) && !empty ($_POST["browse"])) {
-        saveProduct($conn);
-        header("Location: products.php ");
+        $title = testInput($_POST["title"]);
+        $description = testInput($_POST["description"]);
+        $price = testInput($_POST["price"]);
+        try {
+            $stmt = $conn->prepare("INSERT INTO products( title, description, price) VALUES ( :title, :description, :price )");
+            $stmt->execute(array(':title' => $title, ':description' => $description, ':price' => $price));
+        } catch (PDOException $e) {
+            echo translate("Error: ") . $e->getMessage();
+        } finally {
+            header("Location: products.php ");
+        }
     } else {
-        echo translate("Empty field/fields");
+        $php_errormsg = translate("Empty field/fields");
     }
 }
 
-function editProduct($conn)
-{
-    $title = testInput($_POST["title"]);
-    $description = testInput($_POST["description"]);
-    $price = testInput($_POST["price"]);
-    try {
-        $sql = "UPDATE products SET title=?, description=?, price=? WHERE id=?";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute([$title, $description, $price, $_SESSION["id"]]);
-    } catch (PDOException $e) {
-        echo translate("Error: ") . $e->getMessage();
-    }
-}
-
-if (isset ($_POST["edit"])) {
+if (isset ($_POST["id"])) {
     if (isset ($_POST["title"]) && isset ($_POST["description"]) && isset ($_POST["price"]) && isset ($_POST["browse"]) &&
         !empty ($_POST["title"]) && !empty ($_POST["description"]) && !empty ($_POST["price"]) && !empty ($_POST["browse"])) {
-        editProduct($conn);
-        header("Location: products.php");
+        $title = testInput($_POST["title"]);
+        $description = testInput($_POST["description"]);
+        $price = testInput($_POST["price"]);
+        try {
+            $sql = "UPDATE products SET title=?, description=?, price=? WHERE id=?";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute([$title, $description, $price, $_SESSION["id"]]);
+        } catch (PDOException $e) {
+            echo translate("Error: ") . $e->getMessage();
+        } finally {
+            header("Location: products.php");
+        }
         die;
     } else {
-        echo translate("Empty field/fields");
+        $php_errormsg = translate("Empty field/fields");
     }
 }
 
@@ -66,7 +56,7 @@ if (isset ($_POST["edit"])) {
 
 <html>
 <head>
-    <link rel="stylesheet" type="text/css" href="<?= CSS_PATH ?>">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 <h1>
