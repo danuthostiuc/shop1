@@ -40,6 +40,8 @@ if (isset($_POST["save"]) && isset($_GET["id"])) {
         try {
             $stmt = $conn->prepare("UPDATE products SET title=?, description=?, price=?, image=? WHERE id=?");
             $stmt->execute([$title, $description, $price, $_FILES["image"]["name"], $_GET["id"]]);
+        } catch (PDOException $e) {
+            $php_errormsg = translate("Error: " . $e->getMessage());
         } finally {
             header("Location: products.php");
             die;
