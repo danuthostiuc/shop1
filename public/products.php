@@ -24,7 +24,7 @@ if (isset($_GET["id"])) {
         $stmt->bindValue(1, $_GET["id"], PDO::PARAM_INT);
         $stmt->execute();
     } catch (PDOException $e) {
-        echo translate("Error: ") . $e->getMessage();
+        $php_errormsg = translate("Error: " . $e->getMessage());
     } finally {
         header("Location: products.php");
         die;

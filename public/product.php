@@ -17,15 +17,9 @@ if (isset($_POST["save"]) && !isset($_GET["id"])) {
         $title = testInput($_POST["title"]);
         $description = testInput($_POST["description"]);
         $price = testInput($_POST["price"]);
-        $image_file_type = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
-        $extensions_arr = array("jpg", "jpeg", "png", "gif");
         try {
-            if (in_array($image_file_type, $extensions_arr)) {
-                $stmt = $conn->prepare("INSERT INTO products(title, description, price, image) VALUES (:title, :description, :price, :image)");
-                $stmt->execute(array(':title' => $title, ':description' => $description, ':price' => $price, ':image' => $_FILES["image"]["name"]));
-            } else {
-                $php_errormsg = translate("Unaccepted file extension.");
-            }
+            $stmt = $conn->prepare("INSERT INTO products(title, description, price, image) VALUES (:title, :description, :price, :image)");
+            $stmt->execute(array(':title' => $title, ':description' => $description, ':price' => $price, ':image' => $_FILES["image"]["name"]));
         } catch (PDOException $e) {
             $php_errormsg = translate("Error: " . $e->getMessage());
         } finally {
@@ -43,15 +37,9 @@ if (isset($_POST["save"]) && isset($_GET["id"])) {
         $title = testInput($_POST["title"]);
         $description = testInput($_POST["description"]);
         $price = testInput($_POST["price"]);
-        $image_file_type = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
-        $extensions_arr = array("jpg", "jpeg", "png", "gif");
         try {
-            if (in_array($image_file_type, $extensions_arr)) {
-                $stmt = $conn->prepare("UPDATE products SET title=?, description=?, price=?, image=? WHERE id=?");
-                $stmt->execute([$title, $description, $price, $_FILES["image"]["name"], $_GET["id"]]);
-            }
-        } catch (PDOException $e) {
-            $php_errormsg = translate("Error: " . $e->getMessage());
+            $stmt = $conn->prepare("UPDATE products SET title=?, description=?, price=?, image=? WHERE id=?");
+            $stmt->execute([$title, $description, $price, $_FILES["image"]["name"], $_GET["id"]]);
         } finally {
             header("Location: products.php");
             die;
