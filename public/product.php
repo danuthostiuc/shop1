@@ -17,8 +17,7 @@ if (isset($_POST["save"]) && !isset($_GET["id"])) {
         $title = testInput($_POST["title"]);
         $description = testInput($_POST["description"]);
         $price = testInput($_POST["price"]);
-        $target_file = $_FILES["image"]["name"];
-        $image_file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $image_file_type = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
         $extensions_arr = array("jpg", "jpeg", "png", "gif");
         try {
             if (in_array($image_file_type, $extensions_arr)) {
@@ -44,8 +43,7 @@ if (isset($_POST["save"]) && isset($_GET["id"])) {
         $title = testInput($_POST["title"]);
         $description = testInput($_POST["description"]);
         $price = testInput($_POST["price"]);
-        $target_file = $_FILES["image"]["name"];
-        $image_file_type = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $image_file_type = strtolower(pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION));
         $extensions_arr = array("jpg", "jpeg", "png", "gif");
         try {
             if (in_array($image_file_type, $extensions_arr)) {
