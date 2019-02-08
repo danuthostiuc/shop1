@@ -15,11 +15,10 @@ if (!isset($_SESSION["admin"])) {
 $order = [];
 
 try {
-    $stmt = $conn->prepare("SELECT name, email, comment, SUM(p.price) AS total FROM orders AS o
+    $stmt = $conn->prepare("SELECT name, email, comment, image, title, description, price FROM orders AS o
                             JOIN prod_ord AS po ON o.id = po.ord_id
                             JOIN products AS p ON po.prod_id = p.id
-                            WHERE o.id = ?
-                            GROUP BY o.id");
+                            WHERE o.id = ?");
     $stmt->bindValue(1, $_SESSION["order_id"], PDO::PARAM_INT);
     $stmt->execute();
     $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -43,19 +42,30 @@ try {
     <?= $php_errormsg ?>
 <?php else: ?>
     <table>
+        <tr>
+            <td rowspan="<?= count($order) + 1 ?>" class="cp_img">
+                <?= $order[0]["name"] ?>
+            </td>
+            <td rowspan="<?= count($order) + 1 ?>" class="cp_img">
+                <?= $order[1]["email"] ?>
+            </td>
+            <td rowspan="<?= count($order) + 1 ?>" class="cp_img">
+                <?= $order[2]["comment"] ?>
+            </td>
+        </tr>
         <?php foreach ($order as $row): ?>
             <tr>
-                <td>
-                    <?= $row["name"] ?>
+                <td class="cp_img">
+                    <img src="img/<?= $row["image"] ?>"/>
                 </td>
-                <td>
-                    <?= $row["email"] ?>
+                <td class="cp_img">
+                    <?= $row["title"] ?>
                 </td>
-                <td>
-                    <?= $row["comment"] ?>
+                <td class="cp_img">
+                    <?= $row["description"] ?>
                 </td>
-                <td>
-                    <?= $row["total"] ?>
+                <td class="cp_img">
+                    <?= $row["price"] ?>
                 </td>
             </tr>
         <?php endforeach; ?>
