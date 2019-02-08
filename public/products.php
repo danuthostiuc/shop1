@@ -25,9 +25,6 @@ if (isset($_GET["id"])) {
         $stmt->execute();
     } catch (PDOException $e) {
         $php_errormsg = translate("Error: " . $e->getMessage());
-    } finally {
-        header("Location: products.php");
-        die;
     }
 }
 

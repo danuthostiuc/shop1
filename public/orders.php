@@ -34,8 +34,7 @@ try {
 <h1>
     <?= translate("Orders") ?>
 </h1>
-
-<?php if (!empty($err_conn_database) || !empty($err_select)) : ?>
+<?php if (!empty($err_conn_database) || !empty($php_errormsg)) : ?>
     <?= $err_conn_database ?>
     <?= $php_errormsg ?>
 <?php else: ?>
@@ -58,6 +57,5 @@ try {
         <?php endforeach; ?>
     </table>
 <?php endif; ?>
-
 </body>
 </html>

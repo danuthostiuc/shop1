@@ -12,6 +12,20 @@ if (!isset($_SESSION["admin"])) {
     die;
 }
 
+try {
+    $stmt = $conn->prepare("SELECT name, email, comment, SUM(p.price) AS total FROM orders AS o
+                            JOIN prod_ord AS po ON o.id = po.ord_id
+                            JOIN products AS p ON po.prod_id = p.id
+                            WHERE o.id = ?
+                            GROUP BY o.id");
+    $stmt->bindValue(1, $_SESSION["order_id"], PDO::PARAM_INT);
+    $stmt->execute();
+    $stmt->setFetchMode(PDO::FETCH_ASSOC);
+    $order = $stmt->fetchAll();
+} catch (PDOException $e) {
+    $php_errormsg = translate("Error: " . $e->getMessage());
+}
+
 ?>
 
 <html>
@@ -22,47 +36,28 @@ if (!isset($_SESSION["admin"])) {
 <h1>
     <?= translate("Order") ?>
 </h1>
-<table>
-    <?php if (!empty($err_conn_database) && !empty($err_select)) : ?>
-        <?= $err_conn_database, $err_select ?>
-    <?php else: ?>
-        <tr>
-            <th> <?= translate("Name") ?> </th>
-            <th> <?= translate("Contact details") ?> </th>
-            <th> <?= translate("Comments") ?> </th>
-            <th colspan="3"> <?= translate("Products") ?> </th>
-        </tr>
-        <tr>
-        <td rowspan="<?= count($_SESSION["cart"]) ?>" class="cp_img">
-            <?= translate($name) ?>
-        </td>
-        <td rowspan="<?= count($_SESSION["cart"]) ?>" class="cp_img">
-            <?= translate($contact) ?>
-        </td>
-        <td rowspan="<?= count($_SESSION["cart"]) ?>" class="cp_img">
-            <?= translate($comment) ?>
-        </td>
-        <?php foreach ($stmt->fetchAll() as $row): ?>
-            <td class="cp_img">
-                <img src="/img/<?= $row["image"] ?>"/>
-            </td>
-            <td class="cp_img">
-                <ul>
-                    <li><?= $row["title"] ?></li>
-                    <li><?= $row["description"] ?></li>
-                    <li><?= $row["price"] ?></li>
-                </ul>
-            </td>
-            <td class="cp_img">
-                <a href="cart.php?id=<?= $row["id"] ?>"><?= translate("Remove") ?></a>
-                <?php if (!empty($err_remove)) : ?>
-                    <?= $err_remove ?>
-                <?php endif; ?>
-            </td>
+<?php if (!empty($err_conn_database) && !empty($php_errormsg)) : ?>
+    <?= $err_conn_database ?>
+    <?= $php_errormsg ?>
+<?php else: ?>
+    <table>
+        <?php foreach ($order as $row): ?>
+            <tr>
+                <td>
+                    <?= $row["name"] ?>
+                </td>
+                <td>
+                    <?= $row["email"] ?>
+                </td>
+                <td>
+                    <?= $row["comment"] ?>
+                </td>
+                <td>
+                    <?= $row["total"] ?>
+                </td>
             </tr>
         <?php endforeach; ?>
-    <?php endif; ?>
-</table>
-<a href="index.php"> <?= translate("Go to index") ?></a>
+    </table>
+<?php endif; ?>
 </body>
 </html>
