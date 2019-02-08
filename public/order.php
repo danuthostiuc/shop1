@@ -7,33 +7,9 @@
  */
 require_once("common.php");
 
-if (!empty ($_POST["name"]) && !empty ($_POST["contact"]) && !empty ($_POST["comment"])) {
-    $name = testInput($_POST["name"]);
-    $contact = testInput($_POST["contact"]);
-    $comment = testInput($_POST["comment"]);
-} else {
-    header("Location: cart.php");
+if (!isset($_SESSION["admin"])) {
+    header("Location: login.php");
     die;
-}
-
-$place_holders = implode(',', array_fill(0, count($_SESSION["cart"]), '?'));
-
-if (!empty ($place_holders)) {
-    try {
-        $stmt = $conn->prepare("SELECT * FROM products WHERE id IN ($place_holders)");
-        $stmt->execute($_SESSION["cart"]);
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        $err_select = translate("Error: " . $e->getMessage());
-    }
-} else {
-    try {
-        $stmt = $conn->prepare("SELECT * FROM products WHERE id IN (0)");
-        $stmt->execute();
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        $err_select = translate("Error: " . $e->getMessage());
-    }
 }
 
 ?>

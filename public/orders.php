@@ -13,7 +13,7 @@ if (!isset($_SESSION["admin"])) {
 }
 
 try {
-    $stmt = $conn->prepare("SELECT name, contact, comment, SUM(p.price) AS 'total' FROM orders AS o
+    $stmt = $conn->prepare("SELECT name, email, comment, SUM(p.price) AS total FROM orders AS o
                             JOIN prod_ord AS po ON o.id = po.ord_id
                             JOIN products AS p ON po.prod_id = p.id
                             GROUP BY o.id");

@@ -32,36 +32,71 @@ if (count($_SESSION["cart"]) > 0) {
 if (isset ($_POST["checkout"])) {
     if (!empty($_POST["name"]) && !empty($_POST["contact"])) {
         $protocol = $_SERVER["HTTPS"] === "on" ? "https://" : "http://";
+        $name = testInput($_POST["name"]);
         $to = testInput($_POST["contact"]);
+        $comment = testInput($_POST["comment"]);
         $subject = translate("Test");
-        $message = '<html>'
-            . '<head>'
-            . '</head>'
-            . '<body>'
-            . '<h1>'
-            . translate("Cart")
-            . '</h1>'
-            . '<table>';
-        foreach ($products as $row) {
-            $message .= '<tr>'
-                . '<td>'
-                . '<img src="' . $protocol . $_SERVER["HTTP_HOST"] . '/img/' . $row["image"]
-                . '" width="600" border="0" style="display: block; />'
-                . '</td>'
-                . '<td>'
-                . '<ul>'
-                . '<li>' . $row["title"] . '</li>'
-                . '<li>' . $row["description"] . '</li>'
-                . '<li>' . $row["price"] . '</li>'
-                . '</ul>'
-                . '</td>'
-                . '</tr>';
-        }
-        $message .= '</table>'
-            . '</body>'
-            . '</html>';
+        $message =
+            '<html>' .
+                '<body>' .
+                    '<h1>' .
+                         translate("Cart") .
+                    '</h1>' .
+                    '<table>';
+                    foreach ($products as $row) {
+                        $message .= '<tr>' .
+                                        '<td>' .
+                                            '<img src="' . $protocol . $_SERVER["HTTP_HOST"] . '/img/' . $row["image"] .
+                                            '" width="600" border="0" style="display: block; />' .
+                                        '</td>' .
+                                        '<td>' .
+                                            '<ul>' .
+                                                '<li>' .
+                                                    $row["title"] .
+                                                '</li>' .
+                                                '<li>' .
+                                                    $row["description"] .
+                                                '</li>' .
+                                                '<li>' .
+                                                    $row["price"] .
+                                                '</li>' .
+                                            '</ul>' .
+                                        '</td>' .
+                                    '</tr>';
+                    }
+        $message .= '</table>'.
+                '</body>' .
+            '</html>';
         $headers = "MIME-Version: 1.0" . "\r\n" . "Content-type:text/html;charset=UTF-8" . "\r\n";
         mail($to, $subject, $message, $headers);
+
+        try {
+            $stmt = $conn->prepare("INSERT INTO orders(name, email, comment) VALUES (:name, :email, :comment)");
+            $stmt->execute(array(':name' => $name, ':email' => $to, ':comment' => $comment));
+        } catch (PDOException $e) {
+            $php_errormsg = translate("Error: " . $e->getMessage());
+        }
+
+        try {
+            $stmt = $conn->prepare("SELECT id FROM orders WHERE name = :name AND email = :email AND comment = :comment");
+            $stmt->execute(array(':name' => $name, ':email' => $to, ':comment' => $comment));
+            $_SESSION["order_id"] = $stmt->fetch()["id"];
+        } catch (PDOException $e) {
+            $php_errormsg = translate("Error: " . $e->getMessage());
+        }
+
+        try {
+            $stmt = $conn->prepare("INSERT INTO prod_ord(prod_id, ord_id) VALUES (:prod_id, :ord_id)");
+            $conn->beginTransaction();
+            foreach ($_SESSION["cart"] as $row) {
+                $stmt->execute(array('prod_id' => $row, 'ord_id' => $_SESSION["order_id"]));
+            }
+            $conn->commit();
+        } catch (PDOException $e) {
+            $conn->rollBack();
+            $php_errmsg = $e;
+        }
+
         unset($_SESSION["cart"]);
         header("Location: index.php");
         die;
