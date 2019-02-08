@@ -46,7 +46,7 @@ try {
                     <?= $row["name"] ?>
                 </td>
                 <td>
-                    <?= $row["contact"] ?>
+                    <?= $row["email"] ?>
                 </td>
                 <td>
                     <?= $row["comment"] ?>
