@@ -94,7 +94,7 @@ if (isset ($_POST["checkout"])) {
             $conn->commit();
         } catch (PDOException $e) {
             $conn->rollBack();
-            $php_errmsg = $e;
+            $php_errmsg = translate("Error: " . $e->getMessage());
         }
 
         unset($_SESSION["cart"]);

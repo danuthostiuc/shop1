@@ -12,6 +12,8 @@ if (!isset($_SESSION["admin"])) {
     die;
 }
 
+$orders = [];
+
 try {
     $stmt = $conn->prepare("SELECT name, email, comment, SUM(p.price) AS total FROM orders AS o
                             JOIN prod_ord AS po ON o.id = po.ord_id
