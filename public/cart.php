@@ -34,14 +34,32 @@ if (isset ($_POST["checkout"])) {
         $protocol = $_SERVER["HTTPS"] === "on" ? "https://" : "http://";
         $to = testInput($_POST["contact"]);
         $subject = translate("Test");
-        $message = '<html><head></head><body>' . '<h1>' . translate("Cart") . '</h1>' . '<table>';
+        $message = '<html>'
+            . '<head>'
+            . '</head>'
+            . '<body>'
+            . '<h1>'
+            . translate("Cart")
+            . '</h1>'
+            . '<table>';
         foreach ($products as $row) {
-            $message .= '<tr><td><img src="' . $protocol . $_SERVER["HTTP_HOST"] . '/img/' . $row["image"]
-                . '" width="600" border="0" style="display: block; /></td>'
-                . '<td><ul><li>' . $row["title"] . '</li><li>' . $row["description"] . '</li><li>' . $row["price"]
-                . '</li></ul></td></tr>';
+            $message .= '<tr>'
+                . '<td>'
+                . '<img src="' . $protocol . $_SERVER["HTTP_HOST"] . '/img/' . $row["image"]
+                . '" width="600" border="0" style="display: block; />'
+                . '</td>'
+                . '<td>'
+                . '<ul>'
+                . '<li>' . $row["title"] . '</li>'
+                . '<li>' . $row["description"] . '</li>'
+                . '<li>' . $row["price"] . '</li>'
+                . '</ul>'
+                . '</td>'
+                . '</tr>';
         }
-        $message .= '</table></body></html>';
+        $message .= '</table>'
+            . '</body>'
+            . '</html>';
         $headers = "MIME-Version: 1.0" . "\r\n" . "Content-type:text/html;charset=UTF-8" . "\r\n";
         mail($to, $subject, $message, $headers);
         unset($_SESSION["cart"]);
