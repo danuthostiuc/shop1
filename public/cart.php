@@ -25,12 +25,12 @@ if (count($_SESSION["cart"]) > 0) {
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $products = $stmt->fetchAll();
     } catch (PDOException $e) {
-        $err_select = translate("Error: " . $e->getMessage());
+        $err_select = sprintf(translate("Error: %s"), $e->getMessage());
     }
 }
 
-if (isset ($_POST["checkout"])) {
-    if (!empty($_POST["name"]) && !empty($_POST["contact"])) {
+if (isset($_POST["name"]) && isset($_POST["contact"]) && isset($_POST["comment"])) {
+    if (!empty($_POST["name"]) && !empty($_POST["contact"]) && !empty($_POST["comment"])) {
         $protocol = $_SERVER["HTTPS"] === "on" ? "https://" : "http://";
         $name = testInput($_POST["name"]);
         $to = testInput($_POST["contact"]);
@@ -73,16 +73,9 @@ if (isset ($_POST["checkout"])) {
         try {
             $stmt = $conn->prepare("INSERT INTO orders(name, email, comment) VALUES (:name, :email, :comment)");
             $stmt->execute(array(':name' => $name, ':email' => $to, ':comment' => $comment));
+            $_SESSION["order_id"] = $conn->lastInsertId();
         } catch (PDOException $e) {
-            $php_errormsg = translate("Error: " . $e->getMessage());
-        }
-
-        try {
-            $stmt = $conn->prepare("SELECT id FROM orders WHERE name = :name AND email = :email AND comment = :comment");
-            $stmt->execute(array(':name' => $name, ':email' => $to, ':comment' => $comment));
-            $_SESSION["order_id"] = $stmt->fetch()["id"];
-        } catch (PDOException $e) {
-            $php_errormsg = translate("Error: " . $e->getMessage());
+            $php_errormsg = sprintf(translate("Error: %s"), $e->getMessage());
         }
 
         try {
@@ -94,14 +87,14 @@ if (isset ($_POST["checkout"])) {
             $conn->commit();
         } catch (PDOException $e) {
             $conn->rollBack();
-            $php_errmsg = translate("Error: " . $e->getMessage());
+            $php_errmsg = sprintf(translate("Error: %s"), $e->getMessage());
         }
 
         unset($_SESSION["cart"]);
         header("Location: index.php");
         die;
     } else {
-        $php_errormsg = translate("Complete compulsory fields");
+        $php_errormsg = translate("Complete all fields");
     }
 }
 ?>

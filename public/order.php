@@ -24,7 +24,7 @@ try {
     $stmt->setFetchMode(PDO::FETCH_ASSOC);
     $order = $stmt->fetchAll();
 } catch (PDOException $e) {
-    $php_errormsg = translate("Error: " . $e->getMessage());
+    $php_errormsg = sprintf(translate("Error: %s"), $e->getMessage());
 }
 
 ?>

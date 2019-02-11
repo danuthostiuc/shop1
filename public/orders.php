@@ -23,7 +23,7 @@ try {
     $stmt->setFetchMode(PDO::FETCH_ASSOC);
     $orders = $stmt->fetchAll();
 } catch (PDOException $e) {
-    $php_errormsg = translate("Error: " . $e->getMessage());
+    $php_errormsg = sprintf(translate("Error: %s"), $e->getMessage());
 }
 
 ?>
