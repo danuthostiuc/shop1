@@ -12,7 +12,7 @@ if (count($_SESSION["cart"]) > 0) {
         $stmt->execute($_SESSION["cart"]);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-        $err = translate("Error: " . $e->getMessage());
+        $err = sprintf(translate("Error: %s"), $e->getMessage());
     }
 } else {
     try {
@@ -20,7 +20,7 @@ if (count($_SESSION["cart"]) > 0) {
         $stmt->execute();
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
-        $err = translate("Error: " . $e->getMessage());
+        $err = sprintf(translate("Error: %s"), $e->getMessage());
     }
 }
 ?>
