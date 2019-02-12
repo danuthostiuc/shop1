@@ -20,6 +20,10 @@ if (isset($_GET["logout"])) {
 
 if (isset($_GET["id"])) {
     try {
+        $stmt = $conn->prepare("SELECT image FROM products WHERE id=?");
+        $stmt->bindValue(1, $_GET["id"], PDO::PARAM_INT);
+        $stmt->execute();
+        unlink("img/" . $stmt->fetchColumn(0));
         $stmt = $conn->prepare("DELETE FROM products WHERE id=?");
         $stmt->bindValue(1, $_GET["id"], PDO::PARAM_INT);
         $stmt->execute();
