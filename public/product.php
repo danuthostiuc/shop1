@@ -23,7 +23,7 @@ if (isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["pric
         } catch (PDOException $e) {
             $php_errormsg = sprintf(translate("Error: %s") . $e->getMessage());
         } finally {
-            header("Location: products.php ");
+            header("Location: products.php");
             die;
         }
     } else {
