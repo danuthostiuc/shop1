@@ -73,7 +73,6 @@ if (isset($_POST["name"]) && isset($_POST["contact"]) && isset($_POST["comment"]
         try {
             $stmt = $conn->prepare("INSERT INTO orders(name, email, comment) VALUES (:name, :email, :comment)");
             $stmt->execute(array(':name' => $name, ':email' => $to, ':comment' => $comment));
-            $_SESSION["order_id"] = $conn->lastInsertId();
         } catch (PDOException $e) {
             $php_errormsg = sprintf(translate("Error: %s"), $e->getMessage());
         }
