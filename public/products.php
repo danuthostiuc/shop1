@@ -14,7 +14,7 @@ if (!isset($_SESSION["admin"])) {
 
 if (isset($_GET["logout"])) {
     unset($_SESSION["admin"]);
-    header("Location: index.php");
+    header("Location: login.php");
     die;
 }
 
