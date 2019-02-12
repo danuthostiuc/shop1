@@ -12,19 +12,14 @@ if (!isset($_SESSION["admin"])) {
     die;
 }
 
-if (!isset($_SESSION["order_id"])) {
-    header("Location: index.php");
-    die;
-}
-
 $order = [];
 
 try {
-    $stmt = $conn->prepare("SELECT name, email, comment, creation_date, image, title, description, price FROM orders AS o
+    $stmt = $conn->prepare("SELECT name, email, comment, image, title, description, price FROM orders AS o
                             JOIN prod_ord AS po ON o.id = po.ord_id
                             JOIN products AS p ON po.prod_id = p.id
                             WHERE o.id = ?");
-    $stmt->bindValue(1, $_SESSION["order_id"], PDO::PARAM_INT);
+    $stmt->bindValue(1, $_GET["id"], PDO::PARAM_INT);
     $stmt->execute();
     $stmt->setFetchMode(PDO::FETCH_ASSOC);
     $order = $stmt->fetchAll();
@@ -56,9 +51,6 @@ try {
             </td>
             <td rowspan="<?= count($order) + 1 ?>" class="cp_img">
                 <?= $order[2]["comment"] ?>
-            </td>
-            <td rowspan="<?= count($order) + 1 ?>" class="cp_img">
-                <?= $order[3]["creation_date"] ?>
             </td>
         </tr>
         <?php foreach ($order as $row): ?>
