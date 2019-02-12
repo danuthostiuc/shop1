@@ -16,8 +16,8 @@ $order = [];
 
 try {
     $stmt = $conn->prepare("SELECT name, email, comment, image, title, description, price FROM orders AS o
-                            JOIN prod_ord AS po ON o.id = po.ord_id
-                            JOIN products AS p ON po.prod_id = p.id
+                            JOIN order_product ON o.id = order_product.order_id
+                            JOIN products AS p ON order_product.product_id = p.id
                             WHERE o.id = ?");
     $stmt->bindValue(1, $_GET["id"], PDO::PARAM_INT);
     $stmt->execute();
