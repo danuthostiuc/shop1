@@ -15,7 +15,7 @@ if (!isset($_SESSION["admin"])) {
 $order = [];
 
 try {
-    $stmt = $conn->prepare("SELECT name, email, comment, image, title, description, price FROM orders AS o
+    $stmt = $conn->prepare("SELECT name, email, comment, creation_date, image, title, description, price FROM orders AS o
                             JOIN prod_ord AS po ON o.id = po.ord_id
                             JOIN products AS p ON po.prod_id = p.id
                             WHERE o.id = ?");
@@ -51,6 +51,9 @@ try {
             </td>
             <td rowspan="<?= count($order) + 1 ?>" class="cp_img">
                 <?= $order[2]["comment"] ?>
+            </td>
+            <td rowspan="<?= count($order) + 1 ?>" class="cp_img">
+                <?= $order[3]["creation_date"] ?>
             </td>
         </tr>
         <?php foreach ($order as $row): ?>

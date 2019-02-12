@@ -15,7 +15,7 @@ if (!isset($_SESSION["admin"])) {
 $orders = [];
 
 try {
-    $stmt = $conn->prepare("SELECT name, email, comment, SUM(p.price) AS total FROM orders AS o
+    $stmt = $conn->prepare("SELECT name, email, comment, creation_date, SUM(p.price) AS total FROM orders AS o
                             JOIN prod_ord AS po ON o.id = po.ord_id
                             JOIN products AS p ON po.prod_id = p.id
                             GROUP BY o.id");
@@ -51,6 +51,9 @@ try {
                 </td>
                 <td>
                     <?= $row["comment"] ?>
+                </td>
+                <td>
+                    <?= $row["creation_date"] ?>
                 </td>
                 <td>
                     <?= $row["total"] ?>
