@@ -12,6 +12,11 @@ if (!isset($_SESSION["admin"])) {
     die;
 }
 
+if (!isset($_SESSION["order_id"])) {
+    header("Location: index.php");
+    die;
+}
+
 $order = [];
 
 try {
