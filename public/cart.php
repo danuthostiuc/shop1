@@ -73,6 +73,7 @@ if (isset($_POST["name"]) && isset($_POST["contact"]) && isset($_POST["comment"]
         try {
             $stmt = $conn->prepare("INSERT INTO orders(name, email, comment) VALUES (:name, :email, :comment)");
             $stmt->execute(array(':name' => $name, ':email' => $to, ':comment' => $comment));
+            $last_insert_id = $conn->lastInsertId();
         } catch (PDOException $e) {
             $php_errormsg = sprintf(translate("Error: %s"), $e->getMessage());
         }
@@ -81,7 +82,7 @@ if (isset($_POST["name"]) && isset($_POST["contact"]) && isset($_POST["comment"]
             $stmt = $conn->prepare("INSERT INTO prod_ord(prod_id, ord_id) VALUES (:prod_id, :ord_id)");
             $conn->beginTransaction();
             foreach ($_SESSION["cart"] as $row) {
-                $stmt->execute(array('prod_id' => $row, 'ord_id' => $_SESSION["order_id"]));
+                $stmt->execute(array('prod_id' => $row, 'ord_id' => $last_insert_id));
             }
             $conn->commit();
         } catch (PDOException $e) {
