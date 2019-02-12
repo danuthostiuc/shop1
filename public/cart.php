@@ -74,20 +74,12 @@ if (isset($_POST["name"]) && isset($_POST["contact"]) && isset($_POST["comment"]
             $stmt = $conn->prepare("INSERT INTO orders(name, email, comment) VALUES (:name, :email, :comment)");
             $stmt->execute(array(':name' => $name, ':email' => $to, ':comment' => $comment));
             $last_insert_id = $conn->lastInsertId();
-        } catch (PDOException $e) {
-            $php_errormsg = sprintf(translate("Error: %s"), $e->getMessage());
-        }
-
-        try {
             $stmt = $conn->prepare("INSERT INTO prod_ord(prod_id, ord_id) VALUES (:prod_id, :ord_id)");
-            $conn->beginTransaction();
             foreach ($_SESSION["cart"] as $row) {
                 $stmt->execute(array('prod_id' => $row, 'ord_id' => $last_insert_id));
             }
-            $conn->commit();
         } catch (PDOException $e) {
-            $conn->rollBack();
-            $php_errmsg = sprintf(translate("Error: %s"), $e->getMessage());
+            $php_errormsg = sprintf(translate("Error: %s"), $e->getMessage());
         }
 
         unset($_SESSION["cart"]);
@@ -135,19 +127,26 @@ if (isset($_POST["name"]) && isset($_POST["contact"]) && isset($_POST["comment"]
     </table>
 <?php endif; ?>
 
-<br>
-<form method="post">
-    <input type="text" name="name" placeholder="<?= translate("Name") ?>">
-    <br>
-    <input type="text" name="contact" placeholder="<?= translate("Contact details") ?>">
-    <br>
-    <input type="text" name="comment" placeholder="<?= translate("Comments") ?>">
-    <br>
-    <input type="submit" name="checkout" value="<?= translate("Checkout") ?>">
-</form>
 <?php if (!empty($php_errormsg)): ?>
     <?= $php_errormsg ?>
 <?php endif; ?>
+
+<br>
+<form method="post">
+    <input type="text" name="name" <?php if (isset($_POST["name"])): ?>
+                                        value="<?= htmlentities($_POST["name"]) ?>"
+                                   <?php endif; ?> placeholder="<?= translate("Name") ?>">
+    <br>
+    <input type="text" name="contact" <?php if (isset($_POST["contact"])): ?>
+                                        value="<?= htmlentities($_POST["contact"]) ?>"
+                                      <?php endif; ?> placeholder="<?= translate("Contact details") ?>">
+    <br>
+    <input type="text" name="comment" <?php if (isset($_POST["comment"])): ?>
+                                        value="<?= htmlentities($_POST["comment"]) ?>"
+                                      <?php endif; ?> placeholder="<?= translate("Comments") ?>">
+    <br>
+    <input type="submit" name="checkout" value="<?= translate("Checkout") ?>">
+</form>
 <a href="index.php"><?= translate("Go to index") ?></a>
 </body>
 </html>

@@ -38,15 +38,19 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 <h1>
     <?= translate("Log In") ?>
 </h1>
+<?php if (!empty($php_errormsg)): ?>
+    <?= $php_errormsg ?>
+<?php endif; ?>
 <form method="post">
-    <input type="text" name="username" placeholder="<?= translate("Username") ?>">
+    <input type="text" name="username" <?php if (isset($_POST["username"])): ?>
+                                    value="<?= htmlentities($_POST["username"]); ?>"
+                                       <?php endif; ?> placeholder="<?= translate("Username") ?>">
     <br>
-    <input type="password" name="password" placeholder="<?= translate("Password") ?>">
+    <input type="password" name="password" <?php if (isset($_POST["username"])): ?>
+                                        value="<?= htmlentities($_POST["password"]); ?>"
+                                           <?php endif; ?> placeholder="<?= translate("Password") ?>">
     <br>
     <input type="submit" name="submit" value="<?= translate("Login") ?>">
-    <?php if (!empty($php_errormsg)): ?>
-        <?= $php_errormsg ?>
-    <?php endif; ?>
 </form>
 </body>
 </html>
