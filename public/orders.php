@@ -15,7 +15,7 @@ if (!isset($_SESSION["admin"])) {
 $orders = [];
 
 try {
-    $stmt = $conn->prepare("SELECT name, email, comment, creation_date, SUM(p.price) AS total FROM orders AS o
+    $stmt = $conn->prepare("SELECT o.id AS id, name, email, comment, creation_date, SUM(p.price) AS total FROM orders AS o
                             JOIN prod_ord AS po ON o.id = po.ord_id
                             JOIN products AS p ON po.prod_id = p.id
                             GROUP BY o.id");
@@ -43,6 +43,9 @@ try {
     <table>
         <?php foreach ($orders as $row): ?>
             <tr>
+                <td>
+                    <a href="order.php?id=<?= $row["id"] ?>"><?= $row["id"] ?></a>
+                </td>
                 <td>
                     <?= $row["name"] ?>
                 </td>
