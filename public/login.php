@@ -12,7 +12,7 @@ if (isset($_SESSION["admin"])) {
     die;
 }
 
-if (isset($_POST["submit"])) {
+if (isset($_POST["username"]) && isset($_POST["password"])) {
     if (!empty($_POST["username"]) && !empty($_POST["password"])) {
         $username = testInput($_POST["username"]);
         $password = testInput($_POST["password"]);
