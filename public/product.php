@@ -12,8 +12,8 @@ if (!isset($_SESSION["admin"])) {
     die;
 }
 
-if (isset($_POST["save"]) && !isset($_GET["id"])) {
-    if (isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["price"]) && isset($_FILES["image"]["name"])) {
+if (isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["price"]) && isset($_FILES["image"]["name"]) && !isset($_GET["id"])) {
+    if (!empty($_POST["title"]) && !empty($_POST["description"]) && !empty($_POST["price"]) && !empty($_FILES["image"]["name"])) {
         $title = testInput($_POST["title"]);
         $description = testInput($_POST["description"]);
         $price = testInput($_POST["price"]);
@@ -31,9 +31,8 @@ if (isset($_POST["save"]) && !isset($_GET["id"])) {
     }
 }
 
-
-if (isset($_POST["save"]) && isset($_GET["id"])) {
-    if (isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["price"]) && isset($_FILES["image"]["name"])) {
+if (isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["price"]) && isset($_FILES["image"]["name"]) && isset($_GET["id"])) {
+    if (!empty($_POST["title"]) && !empty($_POST["description"]) && !empty($_POST["price"]) && !empty($_FILES["image"]["name"])) {
         $title = testInput($_POST["title"]);
         $description = testInput($_POST["description"]);
         $price = testInput($_POST["price"]);
@@ -50,6 +49,7 @@ if (isset($_POST["save"]) && isset($_GET["id"])) {
         $php_errormsg = translate("Complete all fields!");
     }
 }
+
 ?>
 
 <html>
