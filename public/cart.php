@@ -74,9 +74,9 @@ if (isset($_POST["name"]) && isset($_POST["contact"]) && isset($_POST["comment"]
             $stmt = $conn->prepare("INSERT INTO orders(name, email, comment) VALUES (:name, :email, :comment)");
             $stmt->execute(array(':name' => $name, ':email' => $to, ':comment' => $comment));
             $last_insert_id = $conn->lastInsertId();
-            $stmt = $conn->prepare("INSERT INTO prod_ord(prod_id, ord_id) VALUES (:prod_id, :ord_id)");
+            $stmt = $conn->prepare("INSERT INTO order_product(product_id, order_id) VALUES (:product_id, :order_id)");
             foreach ($_SESSION["cart"] as $row) {
-                $stmt->execute(array('prod_id' => $row, 'ord_id' => $last_insert_id));
+                $stmt->execute(array('product_id' => $row, 'order_id' => $last_insert_id));
             }
         } catch (PDOException $e) {
             $php_errormsg = sprintf(translate("Error: %s"), $e->getMessage());
