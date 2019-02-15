@@ -55,8 +55,7 @@ if (isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["pric
                 $stmt->execute([$title, $description, $price, $_GET["id"]]);
             } catch (PDOException $e) {
                 $php_errormsg = sprintf(translate("Error: %s"), $e->getMessage());
-            }
-            finally {
+            } finally {
                 header("Location: products.php");
                 die;
             }
@@ -97,30 +96,21 @@ if (isset($_GET["id"])) {
 
 <form method="post" enctype="multipart/form-data">
     <input type="text" name="title"
-        <?php if (isset($_GET["id"])): ?>
-            value="<?= $product[0]["title"] ?>"
-        <?php else: ?>
-            value="<?= isset($_POST["title"]) ? htmlentities($_POST["title"]) : "" ?>"
-        <?php endif; ?>
+           value="<?= isset($_GET["id"]) ? $product[0]["title"] :
+               (isset($_POST["title"]) ? htmlentities($_POST["title"]) : "") ?>"
            placeholder="<?= translate("Title") ?>">
     <br>
     <input type="text" name="description"
-        <?php if (isset($_GET["id"])): ?>
-            value="<?= $product[0]["description"] ?>"
-        <?php else: ?>
-            value="<?= isset($_POST["description"]) ? htmlentities($_POST["description"]) : "" ?>"
-        <?php endif; ?> placeholder="<?= translate("Description") ?>">
+           value="<?= isset($_GET["id"]) ? $product[0]["description"] :
+               (isset($_POST["description"]) ? htmlentities($_POST["description"]) : "") ?>"
+           placeholder="<?= translate("Description") ?>">
     <br>
     <input type="number" name="price"
-        <?php if (isset($_GET["id"])): ?>
-            value="<?= $product[0]["price"] ?>"
-        <?php else: ?>
-            value="<?= isset($_POST["price"]) ? htmlentities($_POST["price"]) : "" ?>"
-        <?php endif; ?> placeholder="<?= translate("Price") ?>">
+           value="<?= isset($_GET["id"]) ? $product[0]["price"] :
+               (isset($_POST["price"]) ? htmlentities($_POST["price"]) : "") ?>"
+           placeholder="<?= translate("Price") ?>">
     <br>
-    <?php if (!isset($_GET["id"])): ?>
-        <input type="file" name="image" accept=".png, .gif, .jpeg, .jpg">
-    <?php endif; ?>
+    <?= !isset($_GET["id"]) ? '<input type="file" name="image" accept=".png, .gif, .jpeg, .jpg">' : ''; ?>
     <br>
     <a href="products.php"><?= translate("Products") ?></a>
     <input type="submit" name="save" value="<?= translate("Save") ?>">

@@ -42,13 +42,13 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
     <?= $php_errormsg ?>
 <?php endif; ?>
 <form method="post">
-    <input type="text" name="username" <?php if (isset($_POST["username"])): ?>
-                                    value="<?= htmlentities($_POST["username"]); ?>"
-                                       <?php endif; ?> placeholder="<?= translate("Username") ?>">
+    <input type="text" name="username"
+           value="<?= isset($_POST["username"]) ? htmlentities($_POST["username"]) : "" ?>"
+           placeholder="<?= translate("Username") ?>">
     <br>
-    <input type="password" name="password" <?php if (isset($_POST["username"])): ?>
-                                        value="<?= htmlentities($_POST["password"]); ?>"
-                                           <?php endif; ?> placeholder="<?= translate("Password") ?>">
+    <input type="password" name="password"
+           value="<?= isset($_POST["password"]) ? htmlentities($_POST["password"]) : "" ?>"
+           placeholder="<?= translate("Password") ?>">
     <br>
     <input type="submit" name="submit" value="<?= translate("Login") ?>">
 </form>

@@ -133,17 +133,14 @@ if (isset($_POST["name"]) && isset($_POST["contact"]) && isset($_POST["comment"]
 
 <br>
 <form method="post">
-    <input type="text" name="name" <?php if (isset($_POST["name"])): ?>
-                                        value="<?= htmlentities($_POST["name"]) ?>"
-                                   <?php endif; ?> placeholder="<?= translate("Name") ?>">
+    <input type="text" name="name" value="<?= isset($_POST["name"]) ? htmlentities($_POST["name"]) : "" ?>"
+           placeholder="<?= translate("Name") ?>">
     <br>
-    <input type="text" name="contact" <?php if (isset($_POST["contact"])): ?>
-                                        value="<?= htmlentities($_POST["contact"]) ?>"
-                                      <?php endif; ?> placeholder="<?= translate("Contact details") ?>">
+    <input type="text" name="contact" value="<?= isset($_POST["contact"]) ? htmlentities($_POST["contact"]) : ""?>"
+           placeholder="<?= translate("Contact details") ?>">
     <br>
-    <input type="text" name="comment" <?php if (isset($_POST["comment"])): ?>
-                                        value="<?= htmlentities($_POST["comment"]) ?>"
-                                      <?php endif; ?> placeholder="<?= translate("Comments") ?>">
+    <input type="text" name="comment" value="<?= isset($_POST["comment"]) ? htmlentities($_POST["comment"]) : ""?>"
+           placeholder="<?= translate("Comments") ?>">
     <br>
     <input type="submit" name="checkout" value="<?= translate("Checkout") ?>">
 </form>
