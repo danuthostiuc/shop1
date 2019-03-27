@@ -47,7 +47,7 @@ if (isset($_POST["name"]) && isset($_POST["contact"]) && isset($_POST["comment"]
                         $message .= '<tr>' .
                                         '<td>' .
                                             '<img src="' . $protocol . $_SERVER["HTTP_HOST"] . '/img/' . $row["image"] .
-                                            '" width="600" border="0" style="display: block; />' .
+                                            '" width="600" border="0" style="display:block;"/>' .
                                         '</td>' .
                                         '<td>' .
                                             '<ul>' .
